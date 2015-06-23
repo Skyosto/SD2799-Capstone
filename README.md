@@ -1,2 +1,2 @@
 # SD2799-Capstone
-Sd2799 Capstone project
+SD2799 Capstone project
