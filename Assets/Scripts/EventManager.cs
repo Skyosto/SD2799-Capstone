@@ -5,7 +5,8 @@ using System;
 
 public class EventManager : MonoBehaviour {
 
-	public enum eventTypes {isStoryScene, isDialogScene};
+	public static bool isWaitingForInput;
+	public static bool isEndOfScript;
 
 	public DialogPanel dialogPanel;
 	public Text dialogText;
@@ -21,7 +22,6 @@ public class EventManager : MonoBehaviour {
 	}
 
 	void OnLevelWasLoaded(int level) {
-		print ("I got here.");
 		dialogPanel = FindObjectOfType<DialogPanel>();
 		dialogText = dialogPanel.dialogText;
 	}
@@ -33,14 +33,14 @@ public class EventManager : MonoBehaviour {
 	#endregion
 
 	public void progressEvent() {
-			if (dialogPanel.isEndOfScript) {
+			if (EventManager.isEndOfScript) {
 				//Move to next scene
 			}
-			else if (dialogPanel.isWaitingForInput) {
+			else if (EventManager.isWaitingForInput) {
 				dialogText.text = "";
 				dialogPanel.SetStateOfDialogue (dialogPanel.GetStateOfDialogue () + 1);
 				dialogPanel.SetPositionInDialogLine (0);
-				dialogPanel.isWaitingForInput = false;
+				EventManager.isWaitingForInput = false;
 			} else {
 				print (dialogPanel.GetStateOfDialogue ());
 				print ("Automatically finishing line");

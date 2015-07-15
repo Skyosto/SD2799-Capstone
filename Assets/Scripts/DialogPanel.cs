@@ -14,10 +14,8 @@ public class DialogPanel : MonoBehaviour {
 	private float timeTillNextCharacter;
 	private int positionInDialogLine;
 	private int stateOfDialogue;
-	public bool isWaitingForInput;
-	public bool isEndOfScript;
-	public string characterTalking;
 
+	//Window to the script
 	private ScriptContainer scriptContainer;
 
 
@@ -27,9 +25,6 @@ public class DialogPanel : MonoBehaviour {
 		//The dialog panel persists
 		//TODO Use Persistent Singleton pattern to prevent unnecissisary copies
 		GameObject.DontDestroyOnLoad (gameObject);
-
-		//TODO Fix so the script shows who is talking instead of default me.
-		characterTalking = scriptContainer.currentSpeaker;
 
 		//Initialize the timer
 		timeTillNextCharacter = textSpeedInSeconds;
@@ -45,7 +40,7 @@ public class DialogPanel : MonoBehaviour {
 		scriptContainer = FindObjectOfType<ScriptContainer> ();
 
 		//Start typing script immediately?
-		isWaitingForInput = false;
+		EventManager.isWaitingForInput = false;
 	}
 
 	//When a level is loaded
@@ -64,11 +59,11 @@ public class DialogPanel : MonoBehaviour {
 		//If we haven't reached the end of the script yet
 		//Display the line
 		//TODO Add flags and methods to check if an animation is playing
-		if (stateOfDialogue < scriptContainer.dialogLines.Length && !isWaitingForInput) {
+		if (stateOfDialogue < scriptContainer.dialogLines.Length && !EventManager.isWaitingForInput) {
 			DisplayDialogLine (true);
 		} else if (stateOfDialogue >= scriptContainer.dialogLines.Length) {
 			//We've reached the end of the script
-			isEndOfScript = true;
+			EventManager.isEndOfScript = true;
 		} else {
 		}
 
@@ -102,12 +97,12 @@ public class DialogPanel : MonoBehaviour {
 		if (typeWrite) {
 			if (timeTillNextCharacter <= 0) {
 				if (i < dialogLines [stateOfDialogue].Length) {
-					isWaitingForInput = false;
+					EventManager.isWaitingForInput = false;
 					dialogText.text += dialogLines [stateOfDialogue] [i];
 					positionInDialogLine++;
 					timeTillNextCharacter = textSpeedInSeconds;
 				} else {
-					isWaitingForInput = true;
+					EventManager.isWaitingForInput = true;
 				}
 			} else {
 				timeTillNextCharacter -= Time.deltaTime;
@@ -116,7 +111,11 @@ public class DialogPanel : MonoBehaviour {
 			dialogText.text = dialogLines [stateOfDialogue];
 			positionInDialogLine = 0;
 			timeTillNextCharacter = textSpeedInSeconds;
-			isWaitingForInput = true;
+			EventManager.isWaitingForInput = true;
 		}
 	}
+	public void ToggleDialogBoxVisibility(bool visibility) {
+		gameObject.SetActive (visibility);
+	}
+
 }
