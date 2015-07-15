@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlayerOptions : MonoBehaviour {
+public class OptionsController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {

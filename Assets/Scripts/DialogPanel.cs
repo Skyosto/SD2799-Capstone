@@ -4,15 +4,6 @@ using System.Collections;
 using System;
 
 public class DialogPanel : MonoBehaviour {
-	//Assets in the background
-	private TextAsset dialogScript;
-	private string pathToDialogScripts = "Event Scripts/";
-	private string[] dialogLines;
-	private string[] dialogKeys = {
-		"~playerName~",
-		"#SPKR"
-	};
-
 	//"Views" for the dialogue panel
 	//TODO  Obtain the image and animate it whenever waiting for input
 	public Text dialogText;
@@ -27,8 +18,7 @@ public class DialogPanel : MonoBehaviour {
 	public bool isEndOfScript;
 	public string characterTalking;
 
-	//Testing stuff
-	public string charName = "Skyosto";
+	private ScriptContainer scriptContainer;
 
 
 	#region Unity LifeCycle Events
@@ -39,7 +29,7 @@ public class DialogPanel : MonoBehaviour {
 		GameObject.DontDestroyOnLoad (gameObject);
 
 		//TODO Fix so the script shows who is talking instead of default me.
-		characterTalking = charName;
+		characterTalking = scriptContainer.currentSpeaker;
 
 		//Initialize the timer
 		timeTillNextCharacter = textSpeedInSeconds;
@@ -48,6 +38,12 @@ public class DialogPanel : MonoBehaviour {
 		positionInDialogLine = 0;
 		stateOfDialogue = 0;
 
+		//Find the script and parse it into lines to be displayed
+		//getScript (Application.loadedLevel);
+
+		//Find the script parser
+		scriptContainer = FindObjectOfType<ScriptContainer> ();
+
 		//Start typing script immediately?
 		isWaitingForInput = false;
 	}
@@ -55,22 +51,22 @@ public class DialogPanel : MonoBehaviour {
 	//When a level is loaded
 	void OnLevelWasLoaded(int level) {
 		//Find the script and parse it into lines to be displayed
-		getScript (Application.loadedLevel);
-		dialogLines = ParseScript (dialogScript);
-		dialogLines = FilterScript (dialogLines);
+		if (scriptContainer == null) {
+			scriptContainer = FindObjectOfType<ScriptContainer> ();
+		}
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		//Display the current charater talking
-		speakerName.text = characterTalking;
+		speakerName.text = scriptContainer.currentSpeaker;
 
 		//If we haven't reached the end of the script yet
 		//Display the line
 		//TODO Add flags and methods to check if an animation is playing
-		if (stateOfDialogue < dialogLines.Length && !isWaitingForInput) {
-			DisplayDialogLine ();
-		} else if (stateOfDialogue >= dialogLines.Length) {
+		if (stateOfDialogue < scriptContainer.dialogLines.Length && !isWaitingForInput) {
+			DisplayDialogLine (true);
+		} else if (stateOfDialogue >= scriptContainer.dialogLines.Length) {
 			//We've reached the end of the script
 			isEndOfScript = true;
 		} else {
@@ -85,90 +81,42 @@ public class DialogPanel : MonoBehaviour {
 
 	public int GetPositionInDialogLine() {return positionInDialogLine;}
 	public void SetPositionInDialogLine(int position) {positionInDialogLine = position;}
-
-	private void getScript(int levelIndex) {
-		switch (levelIndex) {
-		case 1:
-			dialogScript = Resources.Load(pathToDialogScripts+"Introduction") as TextAsset;
-			break;
-		}
-	}
 	#endregion
 
 	#region Script Filters
 
-	string[] ParseScript(TextAsset script) {
-		string[] parsedScript;
-		parsedScript = script.text.Split ('\n');
-		parsedScript = FilterScript (parsedScript);
-		return parsedScript;
-	}
-
-	//TODO Create more filters in order to correct:
-	//	Replaceing keys with player created name
-	string[] FilterScript (string[] scriptLines) {
-		//For each dialog line
-		for(int i = 0; i < scriptLines.Length; i++) {
-			//Scan for each key
-			foreach (string key in dialogKeys) {
-				//If it conatins a key check which key it is and filter via
-				//Replace or Remove and do something.
-				if(scriptLines[i].Contains(key)){
-					if (key == dialogKeys[0]) {
-						scriptLines[i] = scriptLines[i].Replace(key, charName);
-					}
-				}
-			}
-		}
-		return scriptLines;
-	}
-
 	//Checks to see if the line has a different speaker
 	string CheckForSpeaker(string line) {
-		//If line contains the #SPKR key
-		if (line.Contains(dialogKeys[1])) {//#SPKR 
-			//Remove the key
-			line = line.Replace(dialogKeys[1], "");
-			//Change the talker to the found speaker
-			print ("I'm attempting to read the talking character..");
-			characterTalking = line.Substring(0,line.IndexOf(':'));
-			print (characterTalking);
-			//Remove the speaker
-			line = line.Replace(characterTalking+":","");
-		}
+		line = scriptContainer.FilterKeyInLine ("#SPKR#", line);
 		return line;
 	}
 
 	#endregion
 
-	public void DisplayDialogLine() {
+	public void DisplayDialogLine(bool typeWrite) {
 		int i = positionInDialogLine;
+		string[] dialogLines = scriptContainer.dialogLines;
 		//Check if the line contains a different speaker
 		dialogLines[stateOfDialogue] = CheckForSpeaker (dialogLines[stateOfDialogue]);
 
-		if (timeTillNextCharacter <= 0) {
-			if(i < dialogLines [stateOfDialogue].Length) {
-				isWaitingForInput = false;
-				dialogText.text += dialogLines [stateOfDialogue] [i];
-				positionInDialogLine++;
-				timeTillNextCharacter = textSpeedInSeconds;
-			}
-			else {
-				isWaitingForInput = true;
+		if (typeWrite) {
+			if (timeTillNextCharacter <= 0) {
+				if (i < dialogLines [stateOfDialogue].Length) {
+					isWaitingForInput = false;
+					dialogText.text += dialogLines [stateOfDialogue] [i];
+					positionInDialogLine++;
+					timeTillNextCharacter = textSpeedInSeconds;
+				} else {
+					isWaitingForInput = true;
+				}
+			} else {
+				timeTillNextCharacter -= Time.deltaTime;
 			}
 		} else {
-			timeTillNextCharacter -= Time.deltaTime;
-		}
-	}
-
-	public void DisplayDialogLine(bool typeWrite) {
-		if (typeWrite == false) {
 			dialogText.text = dialogLines [stateOfDialogue];
 			positionInDialogLine = 0;
 			timeTillNextCharacter = textSpeedInSeconds;
 			isWaitingForInput = true;
-		} else {
-			DisplayDialogLine();
 		}
 	}
 }
