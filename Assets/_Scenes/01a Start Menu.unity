@@ -718,8 +718,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff4505512b989aa4185fff7ed546011f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  musicTrackArray: []
-  SoundFXArray: []
+  musicTrackArray:
+  - {fileID: 0}
+  SoundFXArray:
+  - {fileID: 0}
 --- !u!82 &758623330
 AudioSource:
   m_ObjectHideFlags: 0

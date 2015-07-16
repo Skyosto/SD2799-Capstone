@@ -11,14 +11,17 @@ public class EventManager : MonoBehaviour {
 	public DialogPanel dialogPanel;
 	public Text dialogText;
 
+	MusicManager musicManager;
+
 	#region Unity LifeCycle Events
 	// Use this for initialization
 	void Start () {
 		GameObject.DontDestroyOnLoad (gameObject);
+		musicManager = FindObjectOfType<MusicManager> ();
 	}
 
 	void Awake() {
-		//dialogPanel = GetComponent<DialogPanel> ();
+
 	}
 
 	void OnLevelWasLoaded(int level) {

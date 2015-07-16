@@ -33,16 +33,25 @@ public class MusicManager : MonoBehaviour {
 		audioSource.Play ();
 	}
 
-	public void PlaySoundFX(int soundIndex, Vector3 position) {
-		GameObject soundFXObject = new GameObject ("tempSoundFX");
-		AudioSource objectAudioSource = soundFXObject.AddComponent<AudioSource> ();
-		soundFXObject.transform.position = position;
-		objectAudioSource.clip = SoundFXArray [soundIndex];
-		/*
-		 * Add volume effects here:
-		 * objectAudioSource.volume = (Volume algorithm here);
-		 * */
-		objectAudioSource.Play ();
-		Destroy (soundFXObject, objectAudioSource.clip.length);
+	public void PlaySoundFX(int soundIndex) {
+		if (SoundFXArray [soundIndex]) {
+			GameObject soundFXObject = new GameObject ("tempSoundFX");
+			AudioSource objectAudioSource = soundFXObject.AddComponent<AudioSource> ();
+			objectAudioSource.clip = SoundFXArray [soundIndex];
+			/*
+			 * Add volume effects here:
+			 * objectAudioSource.volume = (Volume algorithm here);
+			 * */
+			objectAudioSource.Play ();
+			Destroy (soundFXObject, objectAudioSource.clip.length);
+		} else {
+			Debug.LogError("Audio clip not found.");
+		}
+	}
+
+	float AdjustVolume() {
+		float volume = 0;
+
+		return volume;
 	}
 }
