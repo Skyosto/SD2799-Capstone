@@ -17,14 +17,22 @@ public class DialogPanel : MonoBehaviour {
 
 	//Window to the script
 	private ScriptContainer scriptContainer;
+	static DialogPanel instance = null;
 
 
 	#region Unity LifeCycle Events
+
+	void Awake() {
+		if (instance != null && instance != this) {
+			Destroy (gameObject);
+		} else {
+			instance = this;
+			GameObject.DontDestroyOnLoad(gameObject);
+		}
+	}
+
 	// Use this for initialization
 	void Start () {
-		//The dialog panel persists
-		//TODO Use Persistent Singleton pattern to prevent unnecissisary copies
-		GameObject.DontDestroyOnLoad (gameObject);
 
 		//Initialize the timer
 		timeTillNextCharacter = textSpeedInSeconds;

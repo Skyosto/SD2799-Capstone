@@ -12,23 +12,32 @@ public class ScriptContainer : MonoBehaviour {
 	};
 
 	public string[] dialogLines;
-
-	//Testing stuff
-	public string currentSpeaker = "Skyosto";
+	public string currentSpeaker;
+	static ScriptContainer instance = null;
 
 	public string GetCurrentSpeaker() {
 		return currentSpeaker;
 	}
 
+	void Awake() {
+		if (instance != null && instance != this) {
+			Destroy (gameObject);
+		} else {
+			instance = this;
+			GameObject.DontDestroyOnLoad(gameObject);
+		}
+	}
+
 	// Use this for initialization
 	void Start () {
-		DontDestroyOnLoad (gameObject);
 	}
 
 	void OnLevelWasLoaded(int level) {
-		LoadScript (level);
-		ParseScriptIntoLines ();
-		FilterScriptForKeys (dialogLines);
+		if (level != 2 && level != 0) {
+			LoadScript (level);
+			ParseScriptIntoLines ();
+			FilterScriptForKeys (dialogLines);
+		}
 	}
 	
 	// Update is called once per frame

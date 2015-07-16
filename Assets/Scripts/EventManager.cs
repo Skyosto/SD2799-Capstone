@@ -12,26 +12,31 @@ public class EventManager : MonoBehaviour {
 	public Text dialogText;
 
 	MusicManager musicManager;
+	static EventManager instance;
 
 	#region Unity LifeCycle Events
 	// Use this for initialization
 	void Start () {
-		GameObject.DontDestroyOnLoad (gameObject);
+		if (instance != null && instance != this) {
+			Destroy (gameObject);
+		} else {
+			instance = this;
+			GameObject.DontDestroyOnLoad(gameObject);
+		}
+
 		musicManager = FindObjectOfType<MusicManager> ();
 	}
 
-	void Awake() {
-
-	}
 
 	void OnLevelWasLoaded(int level) {
-		dialogPanel = FindObjectOfType<DialogPanel>();
-		dialogText = dialogPanel.dialogText;
+		if(level != 2 && level != 0) {
+			dialogPanel = FindObjectOfType<DialogPanel>();
+			dialogText = dialogPanel.dialogText;
+		}
 	}
 	
 	// Update is called once per frame
 	void Update () {
-
 	}
 	#endregion
 
@@ -41,12 +46,10 @@ public class EventManager : MonoBehaviour {
 			}
 			else if (EventManager.isWaitingForInput) {
 				dialogText.text = "";
-				dialogPanel.SetStateOfDialogue (dialogPanel.GetStateOfDialogue () + 1);
-				dialogPanel.SetPositionInDialogLine (0);
+				dialogPanel.SetStateOfDialogue (dialogPanel.GetStateOfDialogue () + 1);;
 				EventManager.isWaitingForInput = false;
 			} else {
 				print (dialogPanel.GetStateOfDialogue ());
-				print ("Automatically finishing line");
 				dialogPanel.DisplayDialogLine (false);
 			}
 	}
