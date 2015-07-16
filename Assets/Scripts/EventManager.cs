@@ -49,7 +49,6 @@ public class EventManager : MonoBehaviour {
 				dialogPanel.SetStateOfDialogue (dialogPanel.GetStateOfDialogue () + 1);;
 				EventManager.isWaitingForInput = false;
 			} else {
-				print (dialogPanel.GetStateOfDialogue ());
 				dialogPanel.DisplayDialogLine (false);
 			}
 	}

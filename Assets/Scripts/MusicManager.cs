@@ -15,7 +15,7 @@ public class MusicManager : MonoBehaviour {
 	
 	void Awake() {
 		if (instance != null && instance != this) {
-			Destroy (gameObject);
+			Destroy (this.gameObject);
 		} else {
 			instance = this;
 			GameObject.DontDestroyOnLoad(gameObject);
@@ -28,13 +28,15 @@ public class MusicManager : MonoBehaviour {
 	}
 
 	void OnLevelWasLoaded(int level) {
-		switch (level) {
-		case 0:
-			PlayMusic(0);
-			break;
-		case 2:
-			PlayMusic(1);
-			break;
+		if (instance == this) {
+			switch (level) {
+			case 0:
+				PlayMusic (0);
+				break;
+			case 2:
+				PlayMusic (1);
+				break;
+			}
 		}
 	}
 	

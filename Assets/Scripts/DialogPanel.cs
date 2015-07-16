@@ -57,6 +57,19 @@ public class DialogPanel : MonoBehaviour {
 		if (scriptContainer == null) {
 			scriptContainer = FindObjectOfType<ScriptContainer> ();
 		}
+		//Obtain text speed from the PlayerPrefsManager
+		int textSpeed = (int)Mathf.Round (PlayerPrefsManager.GetTextSpeed ());
+		switch(textSpeed) {
+		case 1:
+			textSpeedInSeconds = 0.5f;
+			break;
+		case 2:
+			textSpeedInSeconds = 0.1f;
+			break;
+		case 3:
+			textSpeedInSeconds = 0.012f;
+			break;
+		}
 	}
 	
 	// Update is called once per frame
@@ -68,7 +81,11 @@ public class DialogPanel : MonoBehaviour {
 		//Display the line
 		//TODO Add flags and methods to check if an animation is playing
 		if (stateOfDialogue < scriptContainer.dialogLines.Length && !EventManager.isWaitingForInput) {
-			DisplayDialogLine (true);
+			if(PlayerPrefsManager.GetTextSpeed() > 0f) {
+				DisplayDialogLine (true);
+			} else { 
+				DisplayDialogLine (false);
+			}
 		} else if (stateOfDialogue >= scriptContainer.dialogLines.Length) {
 			//We've reached the end of the script
 			EventManager.isEndOfScript = true;
