@@ -200,7 +200,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dialogText: {fileID: 11411074}
   speakerName: {fileID: 11452642}
-  stateOfDialogue: 137
+  stateOfDialogue: 0
   scriptContainer: {fileID: 11450332, guid: fa356e80a51399c468ecd7eb724f0e75, type: 2}
 --- !u!114 &11438886
 MonoBehaviour:

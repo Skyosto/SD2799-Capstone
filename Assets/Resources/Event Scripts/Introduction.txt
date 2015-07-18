@@ -1,5 +1,5 @@
-#WAIT#5$
-#STRTDialog#
+#WAIT#2$
+#STRT_Dialog#
 #SPKR#Skyosto:Hello! Welcome to our capstone game.
 This is a dummy text file in order to test the engine we are making.
 Wish me luck!
@@ -7,4 +7,4 @@ Wish me luck!
 By the way!
 I'm working really hard to make this code extensible in a group setting!
 So, please, bear with me.
-#ENDDialog#
+#END_Dialog#

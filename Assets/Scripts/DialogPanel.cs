@@ -41,7 +41,7 @@ public class DialogPanel : MonoBehaviour {
 		positionInDialogLine = 0;
 		stateOfDialogue = 0;
 
-		//Find the script and parse it into lines to be displayed
+		scriptContainer = FindObjectOfType<ScriptContainer> ();
 
 		//Start typing script immediately?
 		EventManager.isWaitingForInput = false;
@@ -49,18 +49,18 @@ public class DialogPanel : MonoBehaviour {
 
 	//When a level is loaded
 	void OnLevelWasLoaded(int level) {
+		scriptContainer = FindObjectOfType<ScriptContainer> ();
 		//Obtain text speed from the PlayerPrefsManager
 		AdjustTextSpeed ();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		//Display the current charater talking
-		speakerName.text = scriptContainer.currentSpeaker;
+
 
 		//If we haven't reached the end of the script yet
 		//Display the line
-		if (stateOfDialogue < scriptContainer.dialogLines.Length && !EventManager.isWaitingForInput) {
+		/*if (stateOfDialogue < scriptContainer.dialogLines.Length && !EventManager.isWaitingForInput) {
 			if(PlayerPrefsManager.GetTextSpeed() > 0f) {
 				DisplayDialogLine (true);
 			} else { 
@@ -70,7 +70,7 @@ public class DialogPanel : MonoBehaviour {
 			//We've reached the end of the script
 			EventManager.isEndOfScript = true;
 		} else {
-		}
+		}*/
 
 	}
 	#endregion
@@ -81,6 +81,11 @@ public class DialogPanel : MonoBehaviour {
 
 	public int GetPositionInDialogLine() {return positionInDialogLine;}
 	public void SetPositionInDialogLine(int position) {positionInDialogLine = position;}
+
+	public void UpdateSpeaker() {
+		//Display the current charater talking
+		speakerName.text = scriptContainer.currentSpeaker;
+	}
 	#endregion
 
 	#region Script Filters

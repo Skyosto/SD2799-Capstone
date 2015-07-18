@@ -7,10 +7,13 @@ public class EventManager : MonoBehaviour {
 
 	static EventManager instance;
 	public int scriptLineNumber;
+	string currentLine;
 
 	#region Flags
+	public static bool isInMainMenus;
 	public static bool isWaitingForInput;
 	public static bool isEndOfScript;
+	public static bool isWaitingForTimer = false;
 	#endregion
 	#region Components
 	public DialogPanel dialogPanel;
@@ -32,20 +35,25 @@ public class EventManager : MonoBehaviour {
 			instance = this;
 			GameObject.DontDestroyOnLoad(gameObject);
 		}
+
+		CheckIfInMainMenus ();
 	}
 
 
 	void OnLevelWasLoaded(int level) {
-		if(level != 2 && level != 0) {
-			//dialogPanel = FindObjectOfType<DialogPanel>();
-			//dialogText = dialogPanel.dialogText;
-			scriptLineNumber = 0;
-		}
+		CheckIfInMainMenus ();
+
+		dialogPanel = FindObjectOfType<DialogPanel> ();
+		dialogPanel.gameObject.SetActive (false);
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		ReadEventLine ();
+		if (!isWaitingForTimer) {
+			if(!isInMainMenus) {
+				ReadEventLine ();
+			}
+		}
 	}
 	#endregion
 
@@ -66,6 +74,24 @@ public class EventManager : MonoBehaviour {
 			}
 	}
 
+	void CheckIfInMainMenus() {
+		int[] MainMenus = {
+			0,
+			2
+		};
+		for (int i = 0; i < MainMenus.Length; i++) {
+			if(MainMenus[i] == Application.loadedLevel) {
+				isInMainMenus = true;
+				break;
+			}
+			else if (i >= MainMenus.Length - 1) {
+				isInMainMenus = false;
+			}
+		}
+		Debug.Log ("I'm in a main menu: "+isInMainMenus);
+
+	}
+
 	public void LoadLevel(string name) {
 		Application.LoadLevel (name);
 	}
@@ -75,23 +101,53 @@ public class EventManager : MonoBehaviour {
 	}
 
 	void ReadEventLine() {
-		string currentLine = scriptContainer.dialogLines [scriptLineNumber];
-		if (currentLine != null && currentLine != "") {
+		currentLine = scriptContainer.dialogLines [scriptLineNumber];
+		bool lineContainsAKey = scriptContainer.DoesLineContainKey (currentLine);
+
+		if (currentLine != null && currentLine != "" && lineContainsAKey) {
+			Debug.Log (currentLine);
 			string key = scriptContainer.GetKeyInLine (scriptContainer.dialogLines [scriptLineNumber]);
-			switch(key) {
-			case "#WAIT#":
-				currentLine = scriptContainer.FilterKeyInLine("#WAIT#",currentLine);
-				while(timeWaited < waitTime) {
-					timeWaited += Time.deltaTime;
-				}
-				waitTime = 0;
-				timeWaited = 0;
-					break;
-			}
+			ReactToKey(key);
 		} else {
-			dialogPanel.CheckForSpeaker(currentLine);
+			Debug.Log ("Normal Dialog: "+currentLine);
+			dialogPanel.UpdateSpeaker();
+		}
+		scriptLineNumber++;
+	}
+
+	void ReactToKey(string key) {
+		switch(key) {
+		case "#WAIT#":
+			isWaitingForTimer = true;
+			currentLine = scriptContainer.FilterKeyInLine("#WAIT#",currentLine);
+			StartCoroutine(WaitTimer());
+			break;
+		case "#SPKR#":
+			Debug.Log ("Replacing speaker...");
+			currentLine = scriptContainer.FilterKeyInLine("#SPKR#",currentLine);
+			break;
+		case "#STRT_Dialog#":
+			Debug.Log ("Bringing up the DialogPanel.");
+			currentLine = scriptContainer.FilterKeyInLine("#STRT_Dialog#",currentLine);
+			dialogPanel.gameObject.SetActive(true);
+			break;
+		case "#END_Dialog#":
+			Debug.Log ("Closing the DialogPanel.");
+			currentLine = scriptContainer.FilterKeyInLine("#END_Dialog#",currentLine);
+			dialogPanel.gameObject.SetActive(false);
+			break;
 		}
 	}
 
+	IEnumerator WaitTimer() {
+		while(timeWaited < waitTime) {
+			timeWaited += Time.deltaTime;
+			yield return 0;
+		}
+		Debug.Log ("I waited "+timeWaited+" seconds.");
+		isWaitingForTimer = false;
+		waitTime = 0;
+		timeWaited = 0;
+	}
 
 }

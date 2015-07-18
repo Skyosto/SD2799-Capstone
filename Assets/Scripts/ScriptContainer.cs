@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class ScriptContainer : MonoBehaviour {
 
@@ -8,15 +9,15 @@ public class ScriptContainer : MonoBehaviour {
 	private string[] dialogKeys = {
 		"~playerName~",
 		"#SPKR#",
-		"#STRTDialog#",
-		"#ENDDialog#",
+		"#STRT_Dialog#",
+		"#END_Dialog#",
 		"#WAIT#",
 		"#CHAR-A#",
 		"#CHAR-B#",
 	};
 
 	public string[] dialogLines;
-	public string currentSpeaker;
+	public string currentSpeaker = "";
 	static ScriptContainer instance = null;
 
 	public string GetCurrentSpeaker() {
@@ -90,8 +91,10 @@ public class ScriptContainer : MonoBehaviour {
 
 	public bool DoesLineContainKey(string line) {
 		//Check through our whole list if it contains any keys
-		foreach (string key in dialogLines) {
-			if (line.Contains(key)) {
+		foreach (string key in dialogKeys) {
+			bool lineContainsKey = line.Contains(key);
+			if (lineContainsKey) {
+				Debug.Log ("Line that key was found: "+line);
 				return true;
 			}
 		}
@@ -100,7 +103,6 @@ public class ScriptContainer : MonoBehaviour {
 	}
 
 	public string GetKeyInLine(string line) {
-		string keyFound;
 		foreach (string key in dialogKeys) {
 			if(line.Contains(key)) {
 				return key;
@@ -113,27 +115,29 @@ public class ScriptContainer : MonoBehaviour {
 	public string FilterKeyInLine(string key, string line) {
 
 		if (key == dialogKeys [1]) {//#SPKR 
-			if (line.Contains (dialogKeys [1])) {
-				//Remove the key
-				line = line.Replace (dialogKeys [1], "");
-				//Change the talker to the found speaker
-				currentSpeaker = line.Substring (0, line.IndexOf (':'));
-				//Remove the speaker
-				line = line.Replace (currentSpeaker + ":", "");
-			}
-			else {
-				Debug.LogError("Line does not contain "+key+" key.");
-			}
+			//Remove the key
+			line = line.Replace (dialogKeys [1], "");
+			//Change the talker to the found speaker
+			currentSpeaker = line.Substring (0, line.IndexOf (':'));
+			//Remove the speaker
+			line = line.Replace (currentSpeaker + ":", "");
+		} else if (key == dialogKeys [2]) { //#STRT_Dialog#
+			line = line.Replace(dialogKeys[2], "");
 		}
-		if (key == dialogKeys[5]) {
+		else if (key == dialogKeys [3]) { //#END_Dialog#
+			line = line.Replace(dialogKeys[3], "");
+		}
+		else if (key == dialogKeys[4]) { //#WAIT#
 			float time;
 
 			//Remove key
-			line = line.Replace(dialogKeys[5], "");
-
+			line = line.Replace(dialogKeys[4], "");
+			string timeString = line.Substring(0,line.IndexOf('$'));
+			time = Convert.ToSingle(timeString);
+			line = line.Replace(timeString+"$","");
 
 			EventManager.waitTime = time;
-		}else {
+		} else {
 			Debug.LogError(key+" is not valid a valid dialog key.");
 		}
 		return line;

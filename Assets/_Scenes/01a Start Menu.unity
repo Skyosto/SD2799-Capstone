@@ -619,6 +619,10 @@ Prefab:
       propertyPath: m_Name
       value: Event Manager
       objectReference: {fileID: 0}
+    - target: {fileID: 11454916, guid: 8a4ea3fb3704c274c8f10715b82c97b1, type: 2}
+      propertyPath: scriptContainer
+      value: 
+      objectReference: {fileID: 1656164815}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 8a4ea3fb3704c274c8f10715b82c97b1, type: 2}
   m_IsPrefabParent: 0
@@ -897,6 +901,12 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 1a4c11347a82984489e6c0ad7fb8b6d9, type: 2}
   m_IsPrefabParent: 0
+--- !u!114 &1656164815 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 11450332, guid: fa356e80a51399c468ecd7eb724f0e75,
+    type: 2}
+  m_PrefabInternal: {fileID: 2026565700}
+  m_Script: {fileID: 11500000, guid: efbe6196532583c49b669de1f6b1218c, type: 3}
 --- !u!1001 &1753470756
 Prefab:
   m_ObjectHideFlags: 0

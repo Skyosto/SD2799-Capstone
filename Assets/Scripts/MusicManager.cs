@@ -5,6 +5,7 @@ public class MusicManager : MonoBehaviour {
 
 	public AudioClip[] musicTrackArray;
 	public AudioClip[] SoundFXArray;
+	public AudioClip[] ambienceTrackArray;
 	static MusicManager instance = null;
 	private AudioSource audioSource;
 
