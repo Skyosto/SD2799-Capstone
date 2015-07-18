@@ -8,7 +8,11 @@ public class ScriptContainer : MonoBehaviour {
 	private string[] dialogKeys = {
 		"~playerName~",
 		"#SPKR#",
-		""
+		"#STRTDialog#",
+		"#ENDDialog#",
+		"#WAIT#",
+		"#CHAR-A#",
+		"#CHAR-B#",
 	};
 
 	public string[] dialogLines;
@@ -21,7 +25,7 @@ public class ScriptContainer : MonoBehaviour {
 
 	void Awake() {
 		if (instance != null && instance != this) {
-			Destroy (gameObject);
+			Destroy (this.gameObject);
 		} else {
 			instance = this;
 			GameObject.DontDestroyOnLoad(gameObject);
@@ -42,7 +46,7 @@ public class ScriptContainer : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+		print(GetInstanceID());
 	}
 
 	void LoadScript(int level) {
@@ -84,6 +88,28 @@ public class ScriptContainer : MonoBehaviour {
 		return line;
 	}
 
+	public bool DoesLineContainKey(string line) {
+		//Check through our whole list if it contains any keys
+		foreach (string key in dialogLines) {
+			if (line.Contains(key)) {
+				return true;
+			}
+		}
+		//If the line didn't contain a key
+		return false;
+	}
+
+	public string GetKeyInLine(string line) {
+		string keyFound;
+		foreach (string key in dialogKeys) {
+			if(line.Contains(key)) {
+				return key;
+			}
+		}
+		Debug.LogWarning ("No key found using GetKeyInLine(). Returning null.");
+		return null;
+	}
+
 	public string FilterKeyInLine(string key, string line) {
 
 		if (key == dialogKeys [1]) {//#SPKR 
@@ -95,7 +121,19 @@ public class ScriptContainer : MonoBehaviour {
 				//Remove the speaker
 				line = line.Replace (currentSpeaker + ":", "");
 			}
-		} else {
+			else {
+				Debug.LogError("Line does not contain "+key+" key.");
+			}
+		}
+		if (key == dialogKeys[5]) {
+			float time;
+
+			//Remove key
+			line = line.Replace(dialogKeys[5], "");
+
+
+			EventManager.waitTime = time;
+		}else {
 			Debug.LogError(key+" is not valid a valid dialog key.");
 		}
 		return line;

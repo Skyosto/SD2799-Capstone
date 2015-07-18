@@ -1687,7 +1687,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 11488578, guid: 1a4c11347a82984489e6c0ad7fb8b6d9, type: 2}
+      - m_Target: {fileID: 11458518, guid: 1a4c11347a82984489e6c0ad7fb8b6d9, type: 2}
         m_MethodName: ResetToDefaults
         m_Mode: 1
         m_Arguments:
@@ -1806,7 +1806,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 11488578, guid: 1a4c11347a82984489e6c0ad7fb8b6d9, type: 2}
+      - m_Target: {fileID: 11458518, guid: 1a4c11347a82984489e6c0ad7fb8b6d9, type: 2}
         m_MethodName: SaveAndExit
         m_Mode: 1
         m_Arguments:

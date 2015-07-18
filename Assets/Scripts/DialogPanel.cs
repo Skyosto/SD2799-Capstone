@@ -13,10 +13,10 @@ public class DialogPanel : MonoBehaviour {
 	private float textSpeedInSeconds = 0.012f;
 	private float timeTillNextCharacter;
 	private int positionInDialogLine;
-	private int stateOfDialogue;
+	public int stateOfDialogue;
 
 	//Window to the script
-	private ScriptContainer scriptContainer;
+	public ScriptContainer scriptContainer;
 	static DialogPanel instance = null;
 
 
@@ -24,7 +24,7 @@ public class DialogPanel : MonoBehaviour {
 
 	void Awake() {
 		if (instance != null && instance != this) {
-			Destroy (gameObject);
+			Destroy (this.gameObject);
 		} else {
 			instance = this;
 			GameObject.DontDestroyOnLoad(gameObject);
@@ -42,10 +42,6 @@ public class DialogPanel : MonoBehaviour {
 		stateOfDialogue = 0;
 
 		//Find the script and parse it into lines to be displayed
-		//getScript (Application.loadedLevel);
-
-		//Find the script parser
-		scriptContainer = FindObjectOfType<ScriptContainer> ();
 
 		//Start typing script immediately?
 		EventManager.isWaitingForInput = false;
@@ -53,23 +49,8 @@ public class DialogPanel : MonoBehaviour {
 
 	//When a level is loaded
 	void OnLevelWasLoaded(int level) {
-		//Find the script and parse it into lines to be displayed
-		if (scriptContainer == null) {
-			scriptContainer = FindObjectOfType<ScriptContainer> ();
-		}
 		//Obtain text speed from the PlayerPrefsManager
-		int textSpeed = (int)Mathf.Round (PlayerPrefsManager.GetTextSpeed ());
-		switch(textSpeed) {
-		case 1:
-			textSpeedInSeconds = 0.5f;
-			break;
-		case 2:
-			textSpeedInSeconds = 0.1f;
-			break;
-		case 3:
-			textSpeedInSeconds = 0.012f;
-			break;
-		}
+		AdjustTextSpeed ();
 	}
 	
 	// Update is called once per frame
@@ -79,7 +60,6 @@ public class DialogPanel : MonoBehaviour {
 
 		//If we haven't reached the end of the script yet
 		//Display the line
-		//TODO Add flags and methods to check if an animation is playing
 		if (stateOfDialogue < scriptContainer.dialogLines.Length && !EventManager.isWaitingForInput) {
 			if(PlayerPrefsManager.GetTextSpeed() > 0f) {
 				DisplayDialogLine (true);
@@ -106,7 +86,7 @@ public class DialogPanel : MonoBehaviour {
 	#region Script Filters
 
 	//Checks to see if the line has a different speaker
-	string CheckForSpeaker(string line) {
+	public string CheckForSpeaker(string line) {
 		line = scriptContainer.FilterKeyInLine ("#SPKR#", line);
 		return line;
 	}
@@ -141,6 +121,30 @@ public class DialogPanel : MonoBehaviour {
 	}
 	public void ToggleDialogBoxVisibility(bool visibility) {
 		gameObject.SetActive (visibility);
+	}
+
+
+	/* 0 Being instant and 1 - 3 varying speeds, 3 being the fastest.
+	 * 3 = about 60 characters a second;
+	 * 2 = about 10 characters a second;
+	 * 1 = about 2 characters a second;
+	 */
+	public void AdjustTextSpeed() { 
+		int textSpeed = (int)Mathf.Round (PlayerPrefsManager.GetTextSpeed ());
+		switch(textSpeed) {
+		case 1:
+			textSpeedInSeconds = 0.5f;
+			break;
+		case 2:
+			textSpeedInSeconds = 0.1f;
+			break;
+		case 3:
+			textSpeedInSeconds = 0.012f;
+			break;
+		default:
+			Debug.LogError("Text speed found from PlayerPrefs is not valid.");
+			break;
+		}
 	}
 
 }
