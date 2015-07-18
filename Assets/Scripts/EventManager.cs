@@ -89,7 +89,7 @@ public class EventManager : MonoBehaviour {
 					break;
 			}
 		} else {
-
+			dialogPanel.CheckForSpeaker(currentLine);
 		}
 	}
 
