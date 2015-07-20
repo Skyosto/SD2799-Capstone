@@ -14,6 +14,7 @@ public class EventManager : MonoBehaviour {
 	public static bool isWaitingForInput;
 	public static bool isEndOfScript;
 	public static bool isWaitingForTimer = false;
+	//public static bool playerHasControl; I can't remember if he was okay with it being a cinematic experience except for battles....
 	#endregion
 	#region Components
 	public DialogPanel dialogPanel;
@@ -42,15 +43,17 @@ public class EventManager : MonoBehaviour {
 
 	void OnLevelWasLoaded(int level) {
 		CheckIfInMainMenus ();
-
+		
 		dialogPanel = FindObjectOfType<DialogPanel> ();
-		dialogPanel.gameObject.SetActive (false);
+		if(dialogPanel != null) {
+			dialogPanel.gameObject.SetActive (false);
+		}
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		if (!isWaitingForTimer) {
-			if(!isInMainMenus) {
+			if(!isInMainMenus && scriptLineNumber < scriptContainer.dialogLines.Length) {
 				ReadEventLine ();
 			}
 		}

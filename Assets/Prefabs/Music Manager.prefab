@@ -110,17 +110,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   musicTrackArray:
-  - {fileID: 8300000, guid: 9e4c16580400eec4bbdf64492f7bad80, type: 3}
+  - {fileID: 8300000, guid: 62f1cb017b2d2524c95965ae85808e59, type: 3}
   - {fileID: 8300000, guid: 42c41fe574a3b2c46a574d4c89ef2acf, type: 3}
   SoundFXArray:
   - {fileID: 0}
+  ambienceTrackArray: []
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: musicTrackArray.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: 62f1cb017b2d2524c95965ae85808e59, type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 146970}
