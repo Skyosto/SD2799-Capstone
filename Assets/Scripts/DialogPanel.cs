@@ -19,6 +19,9 @@ public class DialogPanel : MonoBehaviour {
 	public ScriptContainer scriptContainer;
 	static DialogPanel instance = null;
 
+	//Children?
+	public GameObject dialogArrow;
+
 
 	#region Unity LifeCycle Events
 
@@ -42,6 +45,7 @@ public class DialogPanel : MonoBehaviour {
 		stateOfDialogue = 0;
 
 		scriptContainer = FindObjectOfType<ScriptContainer> ();
+		dialogArrow = GameObject.Find ("Waiting Input Arrow");
 
 		//Start typing script immediately?
 		EventManager.isWaitingForInput = false;
@@ -98,27 +102,24 @@ public class DialogPanel : MonoBehaviour {
 
 	#endregion
 
-	public void DisplayDialogLine(bool typeWrite) {
+	public void DisplayDialogLine(bool typeWrite, string line) {
 		int i = positionInDialogLine;
-		string[] dialogLines = scriptContainer.dialogLines;
-		//Check if the line contains a different speaker
-		dialogLines[stateOfDialogue] = CheckForSpeaker (dialogLines[stateOfDialogue]);
 
 		if (typeWrite) {
-			if (timeTillNextCharacter <= 0) {
-				if (i < dialogLines [stateOfDialogue].Length) {
-					EventManager.isWaitingForInput = false;
-					dialogText.text += dialogLines [stateOfDialogue] [i];
+			while(i < line.Length) {
+				EventManager.isWaitingForInput = false;
+				if (timeTillNextCharacter <= 0){
+					dialogText.text += line[i];
 					positionInDialogLine++;
 					timeTillNextCharacter = textSpeedInSeconds;
-				} else {
-					EventManager.isWaitingForInput = true;
 				}
-			} else {
-				timeTillNextCharacter -= Time.deltaTime;
+				else {
+					timeTillNextCharacter -= Time.deltaTime;
+				}
 			}
+			EventManager.isWaitingForInput = true;
 		} else {
-			dialogText.text = dialogLines [stateOfDialogue];
+			dialogText.text = line;
 			positionInDialogLine = 0;
 			timeTillNextCharacter = textSpeedInSeconds;
 			EventManager.isWaitingForInput = true;
@@ -150,6 +151,12 @@ public class DialogPanel : MonoBehaviour {
 			Debug.LogError("Text speed found from PlayerPrefs is not valid.");
 			break;
 		}
+	}
+
+	public void PlayDialogArrowAnimation(bool play) {
+		Animator dialogArrowAnimator = dialogArrow.GetComponent<Animator> ();
+		if (play = true && dialogArrowAnimator.)
+		dialogArrowAnimator.SetBool ("isWaitingForInput", play);
 	}
 
 }

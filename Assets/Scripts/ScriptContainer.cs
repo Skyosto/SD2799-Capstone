@@ -12,6 +12,7 @@ public class ScriptContainer : MonoBehaviour {
 		"#STRT_Dialog#",
 		"#END_Dialog#",
 		"#WAIT#",
+		"#PAUSE#",
 		"#CHAR-A#",
 		"#CHAR-B#",
 	};
@@ -137,6 +138,9 @@ public class ScriptContainer : MonoBehaviour {
 			line = line.Replace(timeString+"$","");
 
 			EventManager.waitTime = time;
+		}
+		else if (key == dialogKeys [5]) { //#PAUSE#
+			line = line.Replace(dialogKeys[5], "");
 		} else {
 			Debug.LogError(key+" is not valid a valid dialog key.");
 		}

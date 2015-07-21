@@ -8,3 +8,4 @@ By the way!
 I'm working really hard to make this code extensible in a group setting!
 So, please, bear with me.
 #END_Dialog#
+#PAUSE#

@@ -14,9 +14,11 @@ public class EventManager : MonoBehaviour {
 	public static bool isWaitingForInput;
 	public static bool isEndOfScript;
 	public static bool isWaitingForTimer = false;
+	public static bool isScriptPaused = false;
+	public static bool isGamePaused = false;
 	//public static bool playerHasControl; I can't remember if he was okay with it being a cinematic experience except for battles....
 	#endregion
-	#region Components
+	#region Components & GameObjects
 	public DialogPanel dialogPanel;
 	public Text dialogText;
 	public MusicManager musicManager;
@@ -52,10 +54,21 @@ public class EventManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (!isWaitingForTimer) {
-			if(!isInMainMenus && scriptLineNumber < scriptContainer.dialogLines.Length) {
-				ReadEventLine ();
+		if (!isScriptPaused) {
+			if (!isWaitingForTimer) {
+				if(!isWaitingForInput) {
+					if (!isInMainMenus && scriptLineNumber < scriptContainer.dialogLines.Length) {
+						ReadEventLine ();
+					}
+				} else {
+					dialogPanel.PlayDialogArrowAnimation(true);
+				}
 			}
+			else {
+				Debug.Log("Waiting for wait timer to expire..");
+			}
+		} else {
+			Debug.Log("Script is paused...");
 		}
 	}
 	#endregion
@@ -67,13 +80,13 @@ public class EventManager : MonoBehaviour {
 				print ("End of script was true?");
 			}
 			else if (isWaitingForInput) {
-			print ("I was waiting for input.");
+				print ("I was waiting for input.");
 				dialogText.text = "";
-				dialogPanel.SetStateOfDialogue (dialogPanel.GetStateOfDialogue () + 1);;
-				isWaitingForInput = false;
+				scriptLineNumber++;
+				dialogPanel.DisplayDialogLine (true, currentLine);
 			} else {
-			print ("Ending the line automatically.");
-				dialogPanel.DisplayDialogLine (false);
+				print ("Ending the line automatically.");
+				dialogPanel.DisplayDialogLine (false, currentLine);
 			}
 	}
 
@@ -114,6 +127,7 @@ public class EventManager : MonoBehaviour {
 		} else {
 			Debug.Log ("Normal Dialog: "+currentLine);
 			dialogPanel.UpdateSpeaker();
+			isWaitingForInput = true;
 		}
 		scriptLineNumber++;
 	}
@@ -122,22 +136,27 @@ public class EventManager : MonoBehaviour {
 		switch(key) {
 		case "#WAIT#":
 			isWaitingForTimer = true;
-			currentLine = scriptContainer.FilterKeyInLine("#WAIT#",currentLine);
+			currentLine = scriptContainer.FilterKeyInLine(key,currentLine);
 			StartCoroutine(WaitTimer());
 			break;
 		case "#SPKR#":
 			Debug.Log ("Replacing speaker...");
-			currentLine = scriptContainer.FilterKeyInLine("#SPKR#",currentLine);
+			currentLine = scriptContainer.FilterKeyInLine(key,currentLine);
 			break;
 		case "#STRT_Dialog#":
 			Debug.Log ("Bringing up the DialogPanel.");
-			currentLine = scriptContainer.FilterKeyInLine("#STRT_Dialog#",currentLine);
+			currentLine = scriptContainer.FilterKeyInLine(key,currentLine);
 			dialogPanel.gameObject.SetActive(true);
 			break;
 		case "#END_Dialog#":
 			Debug.Log ("Closing the DialogPanel.");
-			currentLine = scriptContainer.FilterKeyInLine("#END_Dialog#",currentLine);
+			currentLine = scriptContainer.FilterKeyInLine(key,currentLine);
 			dialogPanel.gameObject.SetActive(false);
+			break;
+		case "#PAUSE#":
+			Debug.Log ("Pausing script 'Execution'.");
+			currentLine = scriptContainer.FilterKeyInLine(key,currentLine);
+			isScriptPaused = true;
 			break;
 		}
 	}
