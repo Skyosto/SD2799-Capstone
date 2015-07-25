@@ -6,23 +6,26 @@ using System;
 public class EventManager : MonoBehaviour {
 
 	static EventManager instance;
-	public int scriptLineNumber;
+	public static int scriptLineNumber = 0;
 	string currentLine;
 
 	#region Flags
 	public static bool isInMainMenus;
 	public static bool isWaitingForInput;
 	public static bool isEndOfScript;
-	public static bool isWaitingForTimer = false;
-	public static bool isScriptPaused = false;
-	public static bool isGamePaused = false;
-	//public static bool playerHasControl; I can't remember if he was okay with it being a cinematic experience except for battles....
+	public static bool isWaitingForTimer;
+	public static bool isScriptPaused;
+	public static bool isGamePaused;
+	public static bool playerHasControl;
+	public static bool isDialogTyping;
+	public static bool animationIsPlaying;
 	#endregion
 	#region Components & GameObjects
 	public DialogPanel dialogPanel;
 	public Text dialogText;
 	public MusicManager musicManager;
 	public ScriptContainer scriptContainer;
+	public GameObject fadePanel;
 	#endregion	
 	#region WAIT timers
 	public static float waitTime;
@@ -31,7 +34,8 @@ public class EventManager : MonoBehaviour {
 
 	#region Unity LifeCycle Events
 	// Use this for initialization
-	void Start () {
+	void Awake () {
+		//Start the singleton pattern
 		if (instance != null && instance != this) {
 			Destroy (gameObject);
 		} else {
@@ -39,55 +43,103 @@ public class EventManager : MonoBehaviour {
 			GameObject.DontDestroyOnLoad(gameObject);
 		}
 
-		CheckIfInMainMenus ();
+		InitializeFlagDefaults ();
+		FindSingletons ();
 	}
 
 
 	void OnLevelWasLoaded(int level) {
-		CheckIfInMainMenus ();
-		
-		dialogPanel = FindObjectOfType<DialogPanel> ();
+
+		InitializeFlagDefaults ();
+		FindSingletons ();
+
+		//Find the dialog panel in this level. Then hide it from sight.
 		if(dialogPanel != null) {
 			dialogPanel.gameObject.SetActive (false);
 		}
 	}
+
+	void InitializeFlagDefaults() {
+		//Check to see if the scene we are in is a "Main Menu"
+		CheckIfInMainMenus ();
+
+		scriptLineNumber = 0;
+
+		//Set all the other flags to not active (these are flipped when certain thigns happen...
+		isScriptPaused = false;
+		playerHasControl = false;
+		isWaitingForTimer = false;
+		isWaitingForInput = false;
+		isDialogTyping = false;
+		isEndOfScript = false;
+		animationIsPlaying = false;
+	}
 	
 	// Update is called once per frame
 	void Update () {
-		if (!isScriptPaused) {
-			if (!isWaitingForTimer) {
-				if(!isWaitingForInput) {
-					if (!isInMainMenus && scriptLineNumber < scriptContainer.dialogLines.Length) {
-						ReadEventLine ();
+		Debug.Log ("The current line number is: "+ scriptLineNumber);
+		
+		//Are we in a main menu?
+		if (!isInMainMenus && scriptContainer.isScriptAvailable ()) {
+			//Is the scrip active in executing?
+			if (!isScriptPaused) {
+				//Does the player have control over their character?
+				if(!playerHasControl) {
+					//Are we waiting for any wait timers?
+					if (!isWaitingForTimer) {
+						//Are we waiting for the player to tap the dialog box?
+						if (!isWaitingForInput) {
+							//Is an animation currently playing?
+							if(!animationIsPlaying){
+								if(dialogPanel != null){
+									dialogPanel.PlayDialogArrowAnimation(false);
+								}
+								//Is the dialog panel currently typing dialog?
+								if (!isDialogTyping) {
+									ReadEventLine ();
+									if(!isDialogTyping) {
+										scriptLineNumber++;
+									}
+									//CheckForScriptEnd();
+								} else {
+									Debug.Log("Dialog is being typed. Stopping this line of execution.");
+									dialogPanel.DisplayDialogLine (currentLine);
+								}
+							}
+						} else {
+							Debug.Log ("Waiting for user to tap dialog box.");
+							if(dialogPanel != null) {
+								dialogPanel.PlayDialogArrowAnimation(true);
+							}
+						}
+					} else {
+						Debug.Log ("Waiting for wait timer to expire..");
 					}
 				} else {
-					dialogPanel.PlayDialogArrowAnimation(true);
+					Debug.Log("Player currently has control over character. Stopping this line of execution.");
 				}
-			}
-			else {
-				Debug.Log("Waiting for wait timer to expire..");
+			} else {
+				Debug.Log ("Script is paused...");
 			}
 		} else {
-			Debug.Log("Script is paused...");
+			Debug.Log ("We are in a main menu, or the script is unavailable.");
 		}
 	}
 	#endregion
 
 	public void progressEvent() {
-		print ("Trying to execute.");
-			if (isEndOfScript) {
-				//Move to next scene
-				print ("End of script was true?");
-			}
-			else if (isWaitingForInput) {
-				print ("I was waiting for input.");
-				dialogText.text = "";
-				scriptLineNumber++;
-				dialogPanel.DisplayDialogLine (true, currentLine);
-			} else {
+		DialogPanel dialogBox = FindObjectOfType<DialogPanel>();
+		if (isWaitingForInput) {
+			dialogBox.ClearDialogBox ();
+			scriptLineNumber++;
+			isWaitingForInput = false;
+		} else {
+			/*if (!isWaitingForTimer) {
 				print ("Ending the line automatically.");
-				dialogPanel.DisplayDialogLine (false, currentLine);
-			}
+				dialogBox.DisplayDialogLine (false, currentLine);
+				isWaitingForInput = true;
+			}*/
+		}
 	}
 
 	void CheckIfInMainMenus() {
@@ -108,6 +160,17 @@ public class EventManager : MonoBehaviour {
 
 	}
 
+	void CheckForScriptEnd() {
+		Debug.Log ("I don't really look for the end of the script yet.");
+	}
+
+	void FindSingletons () {
+		musicManager = FindObjectOfType<MusicManager> ();
+		dialogPanel = FindObjectOfType<DialogPanel> ();
+		scriptContainer = FindObjectOfType<ScriptContainer> ();
+		fadePanel = GameObject.Find ("Fade Panel");
+	}
+
 	public void LoadLevel(string name) {
 		Application.LoadLevel (name);
 	}
@@ -118,58 +181,58 @@ public class EventManager : MonoBehaviour {
 
 	void ReadEventLine() {
 		currentLine = scriptContainer.dialogLines [scriptLineNumber];
-		bool lineContainsAKey = scriptContainer.DoesLineContainKey (currentLine);
 
-		if (currentLine != null && currentLine != "" && lineContainsAKey) {
-			Debug.Log (currentLine);
+		Debug.Log ("Line before key checking:\n"+currentLine);
+		if (scriptContainer.DoesLineContainKey (currentLine)) {
 			string key = scriptContainer.GetKeyInLine (scriptContainer.dialogLines [scriptLineNumber]);
-			ReactToKey(key);
-		} else {
-			Debug.Log ("Normal Dialog: "+currentLine);
-			dialogPanel.UpdateSpeaker();
-			isWaitingForInput = true;
+			ReactToKey (key);
+			Debug.Log ("Line after key checking:\n" + currentLine);
 		}
-		scriptLineNumber++;
+		else {
+			dialogPanel.DisplayDialogLine (currentLine);
+		}
 	}
 
 	void ReactToKey(string key) {
-		switch(key) {
+		switch (key) {
+		case "#FADE_IN#":
+			Debug.Log ("Fading into scene.");
+			break;
 		case "#WAIT#":
 			isWaitingForTimer = true;
-			currentLine = scriptContainer.FilterKeyInLine(key,currentLine);
-			StartCoroutine(WaitTimer());
+			currentLine = scriptContainer.FilterKeyInLine (key, currentLine);
+			StartCoroutine (WaitTimer ());
 			break;
 		case "#SPKR#":
 			Debug.Log ("Replacing speaker...");
-			currentLine = scriptContainer.FilterKeyInLine(key,currentLine);
+			currentLine = scriptContainer.FilterKeyInLine (key, currentLine);
+			dialogPanel.UpdateSpeaker ();
 			break;
 		case "#STRT_Dialog#":
 			Debug.Log ("Bringing up the DialogPanel.");
-			currentLine = scriptContainer.FilterKeyInLine(key,currentLine);
-			dialogPanel.gameObject.SetActive(true);
+			currentLine = scriptContainer.FilterKeyInLine (key, currentLine);
+			dialogPanel.gameObject.SetActive (true);
 			break;
 		case "#END_Dialog#":
 			Debug.Log ("Closing the DialogPanel.");
-			currentLine = scriptContainer.FilterKeyInLine(key,currentLine);
-			dialogPanel.gameObject.SetActive(false);
+			currentLine = scriptContainer.FilterKeyInLine (key, currentLine);
+			dialogPanel.gameObject.SetActive (false);
 			break;
 		case "#PAUSE#":
 			Debug.Log ("Pausing script 'Execution'.");
-			currentLine = scriptContainer.FilterKeyInLine(key,currentLine);
+			currentLine = scriptContainer.FilterKeyInLine (key, currentLine);
 			isScriptPaused = true;
 			break;
 		}
 	}
 
 	IEnumerator WaitTimer() {
-		while(timeWaited < waitTime) {
+		while (timeWaited < waitTime) {
 			timeWaited += Time.deltaTime;
 			yield return 0;
 		}
-		Debug.Log ("I waited "+timeWaited+" seconds.");
 		isWaitingForTimer = false;
 		waitTime = 0;
 		timeWaited = 0;
 	}
-
 }

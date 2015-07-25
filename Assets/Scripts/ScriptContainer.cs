@@ -4,7 +4,9 @@ using System;
 
 public class ScriptContainer : MonoBehaviour {
 
+	static ScriptContainer instance = null;
 	private TextAsset currentScript;
+
 	private string pathToDialogScripts = "Event Scripts/";
 	private string[] dialogKeys = {
 		"~playerName~",
@@ -15,11 +17,12 @@ public class ScriptContainer : MonoBehaviour {
 		"#PAUSE#",
 		"#CHAR-A#",
 		"#CHAR-B#",
+		"#FADE_IN#",
+		"#FADE_OUT#"
 	};
 
 	public string[] dialogLines;
 	public string currentSpeaker = "";
-	static ScriptContainer instance = null;
 
 	public string GetCurrentSpeaker() {
 		return currentSpeaker;
@@ -48,7 +51,6 @@ public class ScriptContainer : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		print(GetInstanceID());
 	}
 
 	void LoadScript(int level) {
@@ -57,6 +59,15 @@ public class ScriptContainer : MonoBehaviour {
 			currentScript = Resources.Load(pathToDialogScripts+"Introduction") as TextAsset;
 			break;
 		}
+	}
+
+	public bool isScriptAvailable() {
+		//Was a script loaded OR finished loading?
+		if (currentScript != null) {
+			return true;
+		}
+		//Else
+		return false;
 	}
 
 	private void ParseScriptIntoLines() {
@@ -86,16 +97,11 @@ public class ScriptContainer : MonoBehaviour {
 		return scriptLines;
 	}
 
-	public string FilterKeysInLine(string line) {
-		return line;
-	}
-
 	public bool DoesLineContainKey(string line) {
 		//Check through our whole list if it contains any keys
 		foreach (string key in dialogKeys) {
 			bool lineContainsKey = line.Contains(key);
 			if (lineContainsKey) {
-				Debug.Log ("Line that key was found: "+line);
 				return true;
 			}
 		}
@@ -116,13 +122,12 @@ public class ScriptContainer : MonoBehaviour {
 	public string FilterKeyInLine(string key, string line) {
 
 		if (key == dialogKeys [1]) {//#SPKR 
-			//Remove the key
 			line = line.Replace (dialogKeys [1], "");
-			//Change the talker to the found speaker
 			currentSpeaker = line.Substring (0, line.IndexOf (':'));
-			//Remove the speaker
 			line = line.Replace (currentSpeaker + ":", "");
-		} else if (key == dialogKeys [2]) { //#STRT_Dialog#
+
+		} 
+		else if (key == dialogKeys [2]) { //#STRT_Dialog#
 			line = line.Replace(dialogKeys[2], "");
 		}
 		else if (key == dialogKeys [3]) { //#END_Dialog#
@@ -130,18 +135,23 @@ public class ScriptContainer : MonoBehaviour {
 		}
 		else if (key == dialogKeys[4]) { //#WAIT#
 			float time;
-
 			//Remove key
 			line = line.Replace(dialogKeys[4], "");
 			string timeString = line.Substring(0,line.IndexOf('$'));
 			time = Convert.ToSingle(timeString);
 			line = line.Replace(timeString+"$","");
-
 			EventManager.waitTime = time;
 		}
 		else if (key == dialogKeys [5]) { //#PAUSE#
 			line = line.Replace(dialogKeys[5], "");
-		} else {
+		}
+		else if (key == dialogKeys [8]) { //#PAUSE#
+			line = line.Replace(dialogKeys[8], "");
+		}
+		else if (key == dialogKeys [9]) { //#PAUSE#
+			line = line.Replace(dialogKeys[9], "");
+		}
+		else {
 			Debug.LogError(key+" is not valid a valid dialog key.");
 		}
 		return line;

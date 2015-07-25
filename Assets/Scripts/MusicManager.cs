@@ -26,6 +26,7 @@ public class MusicManager : MonoBehaviour {
 	void Start () {
 		audioSource = GetComponent<AudioSource> ();
 		PlayMusic (0);
+		
 	}
 
 	void OnLevelWasLoaded(int level) {

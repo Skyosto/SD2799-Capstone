@@ -8,20 +8,16 @@ public class DialogPanel : MonoBehaviour {
 	//TODO  Obtain the image and animate it whenever waiting for input
 	public Text dialogText;
 	public Text speakerName;
-
-	//Properties for typing
-	private float textSpeedInSeconds = 0.012f;
-	private float timeTillNextCharacter;
-	private int positionInDialogLine;
-	public int stateOfDialogue;
-
-	//Window to the script
 	public ScriptContainer scriptContainer;
-	static DialogPanel instance = null;
-
-	//Children?
 	public GameObject dialogArrow;
 
+	//Properties for typing
+	private float textSpeedInSeconds;
+	private float timeTillNextCharacter;
+	private int positionInDialogLine;
+
+	//Window to the script
+	static DialogPanel instance = null;
 
 	#region Unity LifeCycle Events
 
@@ -39,91 +35,78 @@ public class DialogPanel : MonoBehaviour {
 
 		//Initialize the timer
 		timeTillNextCharacter = textSpeedInSeconds;
-
-		//Initialize typing "cursor" at the beginning
-		positionInDialogLine = 0;
-		stateOfDialogue = 0;
-
-		scriptContainer = FindObjectOfType<ScriptContainer> ();
-		dialogArrow = GameObject.Find ("Waiting Input Arrow");
-
-		//Start typing script immediately?
-		EventManager.isWaitingForInput = false;
+		FindSingletons ();
+		//Obtain text speed from the PlayerPrefsManager
+		AdjustTextSpeed ();
 	}
 
 	//When a level is loaded
 	void OnLevelWasLoaded(int level) {
-		scriptContainer = FindObjectOfType<ScriptContainer> ();
 		//Obtain text speed from the PlayerPrefsManager
 		AdjustTextSpeed ();
+		FindSingletons ();
 	}
 	
 	// Update is called once per frame
 	void Update () {
 
-
-		//If we haven't reached the end of the script yet
-		//Display the line
-		/*if (stateOfDialogue < scriptContainer.dialogLines.Length && !EventManager.isWaitingForInput) {
-			if(PlayerPrefsManager.GetTextSpeed() > 0f) {
-				DisplayDialogLine (true);
-			} else { 
-				DisplayDialogLine (false);
-			}
-		} else if (stateOfDialogue >= scriptContainer.dialogLines.Length) {
-			//We've reached the end of the script
-			EventManager.isEndOfScript = true;
-		} else {
-		}*/
-
 	}
 	#endregion
 
 	#region Getters and Setters
-	public int GetStateOfDialogue() {return stateOfDialogue;}
-	public void SetStateOfDialogue(int state) {stateOfDialogue = state;}
-
 	public int GetPositionInDialogLine() {return positionInDialogLine;}
 	public void SetPositionInDialogLine(int position) {positionInDialogLine = position;}
+	public Text GetDialogText() {
+		return dialogText;
+	}
 
 	public void UpdateSpeaker() {
 		//Display the current charater talking
 		speakerName.text = scriptContainer.currentSpeaker;
 	}
-	#endregion
-
-	#region Script Filters
-
-	//Checks to see if the line has a different speaker
-	public string CheckForSpeaker(string line) {
-		line = scriptContainer.FilterKeyInLine ("#SPKR#", line);
-		return line;
+	public float GetTextSpeed() {
+		return textSpeedInSeconds;
 	}
 
+	void FindSingletons () {
+		scriptContainer = FindObjectOfType<ScriptContainer> ();
+		dialogText = GameObject.Find ("Dialog Text").GetComponent<Text> ();
+		dialogArrow = GameObject.Find ("Waiting Input Arrow");
+		GameObject speakerNameObj = GameObject.Find ("Speaker Name");
+		speakerName = speakerNameObj.GetComponent<Text> ();
+	}
 	#endregion
 
 	public void DisplayDialogLine(bool typeWrite, string line) {
-		int i = positionInDialogLine;
-
+		EventManager.isDialogTyping = true;
 		if (typeWrite) {
-			while(i < line.Length) {
-				EventManager.isWaitingForInput = false;
-				if (timeTillNextCharacter <= 0){
-					dialogText.text += line[i];
-					positionInDialogLine++;
-					timeTillNextCharacter = textSpeedInSeconds;
-				}
-				else {
-					timeTillNextCharacter -= Time.deltaTime;
-				}
-			}
-			EventManager.isWaitingForInput = true;
+			DisplayDialogLine(line);
 		} else {
 			dialogText.text = line;
 			positionInDialogLine = 0;
 			timeTillNextCharacter = textSpeedInSeconds;
 			EventManager.isWaitingForInput = true;
+			EventManager.isDialogTyping = false;
 		}
+	}
+
+	public void DisplayDialogLine(string line) {
+		if (positionInDialogLine < line.Length){
+			EventManager.isDialogTyping = true;
+			if (timeTillNextCharacter <= 0) {
+				dialogText.text += line [positionInDialogLine];
+				positionInDialogLine++;
+				timeTillNextCharacter = textSpeedInSeconds;
+			} else {
+				timeTillNextCharacter -= Time.deltaTime;
+			}
+		}
+		if (positionInDialogLine >= line.Length) {
+			positionInDialogLine = 0;
+			EventManager.isWaitingForInput = true;
+			EventManager.isDialogTyping = false;
+		}
+
 	}
 	public void ToggleDialogBoxVisibility(bool visibility) {
 		gameObject.SetActive (visibility);
@@ -138,8 +121,11 @@ public class DialogPanel : MonoBehaviour {
 	public void AdjustTextSpeed() { 
 		int textSpeed = (int)Mathf.Round (PlayerPrefsManager.GetTextSpeed ());
 		switch(textSpeed) {
+		case 0:
+			textSpeedInSeconds = 0f;
+			break;
 		case 1:
-			textSpeedInSeconds = 0.5f;
+			textSpeedInSeconds = 0.25f;
 			break;
 		case 2:
 			textSpeedInSeconds = 0.1f;
@@ -154,9 +140,13 @@ public class DialogPanel : MonoBehaviour {
 	}
 
 	public void PlayDialogArrowAnimation(bool play) {
-		Animator dialogArrowAnimator = dialogArrow.GetComponent<Animator> ();
-		if (play = true && dialogArrowAnimator.)
-		dialogArrowAnimator.SetBool ("isWaitingForInput", play);
+		if (dialogArrow != null) {
+			Animator dialogArrowAnimator = dialogArrow.GetComponent<Animator> ();
+			dialogArrowAnimator.SetBool ("isWaitingForInput", play);
+		}
 	}
 
+	public void ClearDialogBox() {
+		dialogText.text = "";
+	}
 }

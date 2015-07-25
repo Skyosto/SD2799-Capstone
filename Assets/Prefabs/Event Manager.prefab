@@ -10,7 +10,7 @@ GameObject:
   - 224: {fileID: 22407898}
   - 114: {fileID: 11454916}
   m_Layer: 5
-  m_Name: Event Manager 1
+  m_Name: Event Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -27,9 +27,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77730870dea2a994ca855f84085eb21a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scriptLineNumber: 0
-  dialogPanel: {fileID: 11432834, guid: 01f388f769fd7cf4ea3de9f64fe2f319, type: 2}
-  dialogText: {fileID: 11411074, guid: 01f388f769fd7cf4ea3de9f64fe2f319, type: 2}
+  dialogPanel: {fileID: 0}
+  dialogText: {fileID: 0}
   musicManager: {fileID: 0}
   scriptContainer: {fileID: 0}
 --- !u!224 &22407898
@@ -59,12 +58,12 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: dialogPanel
       value: 
-      objectReference: {fileID: 11432834, guid: 01f388f769fd7cf4ea3de9f64fe2f319,
+      objectReference: {fileID: 11413214, guid: 01f388f769fd7cf4ea3de9f64fe2f319,
         type: 2}
     - target: {fileID: 0}
       propertyPath: dialogText
       value: 
-      objectReference: {fileID: 11411074, guid: 01f388f769fd7cf4ea3de9f64fe2f319,
+      objectReference: {fileID: 11462682, guid: 01f388f769fd7cf4ea3de9f64fe2f319,
         type: 2}
     - target: {fileID: 0}
       propertyPath: musicManager
