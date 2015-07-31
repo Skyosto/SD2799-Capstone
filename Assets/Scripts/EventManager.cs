@@ -24,8 +24,9 @@ public class EventManager : MonoBehaviour {
 	public DialogPanel dialogPanel;
 	public Text dialogText;
 	public MusicManager musicManager;
-	public ScriptContainer scriptContainer;
+	public static ScriptContainer scriptContainer;
 	public GameObject fadePanel;
+	public CutsceneController cutsceneController;
 	#endregion	
 	#region WAIT timers
 	public static float waitTime;
@@ -78,6 +79,7 @@ public class EventManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		Debug.Log ("The current line number is: "+ scriptLineNumber);
+		CheckForScriptEnd ();
 		
 		//Are we in a main menu?
 		if (!isInMainMenus && scriptContainer.isScriptAvailable ()) {
@@ -95,16 +97,23 @@ public class EventManager : MonoBehaviour {
 									dialogPanel.PlayDialogArrowAnimation(false);
 								}
 								//Is the dialog panel currently typing dialog?
+								if(isEndOfScript) {
+									Debug.Log ("We have reached the end of the script. Load next level.");
+									return;
+								}
 								if (!isDialogTyping) {
 									ReadEventLine ();
-									if(!isDialogTyping) {
+									if(!isDialogTyping && !isEndOfScript) {
 										scriptLineNumber++;
 									}
-									//CheckForScriptEnd();
+									//
 								} else {
 									Debug.Log("Dialog is being typed. Stopping this line of execution.");
 									dialogPanel.DisplayDialogLine (currentLine);
 								}
+							} else {
+								Debug.Log ("Cutscene or another animation is currently playing. Stopping this " +
+									"line of execution.");
 							}
 						} else {
 							Debug.Log ("Waiting for user to tap dialog box.");
@@ -134,11 +143,11 @@ public class EventManager : MonoBehaviour {
 			scriptLineNumber++;
 			isWaitingForInput = false;
 		} else {
-			/*if (!isWaitingForTimer) {
-				print ("Ending the line automatically.");
+			if (!isWaitingForTimer && !animationIsPlaying) {
+				print ("Ending dialog line automatically.");
+				currentLine = scriptContainer.dialogLines [scriptLineNumber];
 				dialogBox.DisplayDialogLine (false, currentLine);
-				isWaitingForInput = true;
-			}*/
+			}
 		}
 	}
 
@@ -161,7 +170,9 @@ public class EventManager : MonoBehaviour {
 	}
 
 	void CheckForScriptEnd() {
-		Debug.Log ("I don't really look for the end of the script yet.");
+		if (scriptLineNumber >= scriptContainer.dialogLines.Length) {
+			isEndOfScript = true;
+		}
 	}
 
 	void FindSingletons () {
@@ -169,6 +180,7 @@ public class EventManager : MonoBehaviour {
 		dialogPanel = FindObjectOfType<DialogPanel> ();
 		scriptContainer = FindObjectOfType<ScriptContainer> ();
 		fadePanel = GameObject.Find ("Fade Panel");
+		cutsceneController = FindObjectOfType<CutsceneController> ();
 	}
 
 	public void LoadLevel(string name) {
@@ -181,6 +193,7 @@ public class EventManager : MonoBehaviour {
 
 	void ReadEventLine() {
 		currentLine = scriptContainer.dialogLines [scriptLineNumber];
+		CheckForScriptEnd();
 
 		Debug.Log ("Line before key checking:\n"+currentLine);
 		if (scriptContainer.DoesLineContainKey (currentLine)) {

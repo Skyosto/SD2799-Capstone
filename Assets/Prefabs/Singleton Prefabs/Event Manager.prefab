@@ -30,7 +30,8 @@ MonoBehaviour:
   dialogPanel: {fileID: 0}
   dialogText: {fileID: 0}
   musicManager: {fileID: 0}
-  scriptContainer: {fileID: 0}
+  fadePanel: {fileID: 0}
+  cutsceneController: {fileID: 0}
 --- !u!224 &22407898
 RectTransform:
   m_ObjectHideFlags: 1
