@@ -1,3 +1,4 @@
+#PAUSE#
 #STRT_Dialog#
 #SPKR#Skyosto:
 Hello! Welcome to our capstone game.

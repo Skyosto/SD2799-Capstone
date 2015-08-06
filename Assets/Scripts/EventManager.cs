@@ -68,7 +68,7 @@ public class EventManager : MonoBehaviour {
 
 		//Set all the other flags to not active (these are flipped when certain thigns happen...
 		isScriptPaused = false;
-		playerHasControl = false;
+		playerHasControl = true;
 		isWaitingForTimer = false;
 		isWaitingForInput = false;
 		isDialogTyping = false;
