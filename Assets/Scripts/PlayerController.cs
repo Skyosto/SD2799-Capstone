@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityStandardAssets.CrossPlatformInput;
 
 public class PlayerController : MonoBehaviour {
 
@@ -17,14 +18,17 @@ public class PlayerController : MonoBehaviour {
 		if (MapMovementController.isTransitioning) {
 			characterAnimator.SetBool("isWalking", false);
 		}
+
+		float horizontalAxis = CrossPlatformInputManager.GetAxis ("Horizontal");
+
 		if(EventManager.playerHasControl) {
-			if (Input.GetKey(KeyCode.LeftArrow)){
+			if (Input.GetKey(KeyCode.LeftArrow) || horizontalAxis < 0){
 				MoveCharacter("Left");
 			}
-			if (Input.GetKey(KeyCode.RightArrow)){
+			if (Input.GetKey(KeyCode.RightArrow) || horizontalAxis > 0){
 				MoveCharacter("Right");
 			}
-			if(!Input.GetKey(KeyCode.LeftArrow) && !Input.GetKey(KeyCode.RightArrow)) {
+			if(!Input.GetKey(KeyCode.LeftArrow) && !Input.GetKey(KeyCode.RightArrow) && horizontalAxis == 0) {
 				characterAnimator.SetBool("isWalking", false);
 			}
 		}

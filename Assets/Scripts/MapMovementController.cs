@@ -9,7 +9,7 @@ public class MapMovementController : MonoBehaviour {
 	public static bool isTransitioning;
 	// Use this for initialization
 	void Start () {
-		playerCharacter = GameObject.Find ("Player Character").transform;
+		playerCharacter = GameObject.Find ("Rizma").transform;
 		camera = GetComponent<Camera> ();
 		cameraMoveSpeed = 5f;
 
