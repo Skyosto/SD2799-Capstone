@@ -41,7 +41,9 @@ public class PlayerController : MonoBehaviour {
 			characterAnimator.SetFloat("Facing Direction", -1f);
 			characterAnimator.SetBool("isWalking", true);
 			Vector3 currentPosition = gameObject.transform.position;
-			Vector3 newPosition = new Vector3 (currentPosition.x - (Time.deltaTime * characterSpeed), currentPosition.y);
+			Vector3 newPosition = new Vector3 (
+				Mathf.Clamp(currentPosition.x - (Time.deltaTime * characterSpeed),0,Screen.width), 
+				currentPosition.y);
 			gameObject.transform.position = newPosition;
 		}
 		else if (direction == "Right") {
@@ -49,7 +51,9 @@ public class PlayerController : MonoBehaviour {
 			characterAnimator.SetFloat("Facing Direction", 1f);
 			characterAnimator.SetBool("isWalking", true);
 			Vector3 currentPosition = gameObject.transform.position;
-			Vector3 newPosition = new Vector3 (currentPosition.x + (Time.deltaTime * characterSpeed), currentPosition.y);
+			Vector3 newPosition = new Vector3 (
+				Mathf.Clamp(currentPosition.x + (Time.deltaTime * characterSpeed),0,Screen.width), 
+				currentPosition.y);
 			gameObject.transform.position = newPosition;
 		}
 	}

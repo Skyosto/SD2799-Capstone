@@ -7,6 +7,11 @@ public class MapMovementController : MonoBehaviour {
 	float cameraMoveSpeed;
 
 	public static bool isTransitioning;
+
+	//In this array position 0 will represent "Left" or "West" and goes clockwise ending with
+	// 3 which is "Bottom" or "South"
+	public static bool[] availableAreasArray = new bool[4];
+
 	// Use this for initialization
 	void Start () {
 		playerCharacter = GameObject.Find ("Rizma").transform;
@@ -18,13 +23,17 @@ public class MapMovementController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		Debug.Log ("Current availability values: "+availableAreasArray[0]+
+		           ", "+availableAreasArray[1]+", "+
+		           availableAreasArray[2]+
+		           ", "+availableAreasArray[3]);
 		if(!isTransitioning) {
 			Vector3 characterPosInPixels = camera.WorldToScreenPoint(playerCharacter.position);
-			if (characterPosInPixels.x >= Screen.width) {
+			if (characterPosInPixels.x >= Screen.width && availableAreasArray[2] == true) {
 				Debug.Log ("Moving screen right.");
 				StartCoroutine(moveCamera(new Vector3(Camera.main.transform.position.x + 16, Camera.main.transform.position.y)));
 				playerCharacter.transform.position = new Vector3(playerCharacter.transform.position.x + 3, playerCharacter.transform.position.y);
-			} else if (characterPosInPixels.x <= 0) {
+			} else if (characterPosInPixels.x <= 0 && availableAreasArray[0] == true) {
 				Debug.Log("Moving screen left.");
 				StartCoroutine(moveCamera(new Vector3(Camera.main.transform.position.x - 16, Camera.main.transform.position.y)));
 				playerCharacter.transform.position = new Vector3(playerCharacter.transform.position.x - 3, playerCharacter.transform.position.y);
