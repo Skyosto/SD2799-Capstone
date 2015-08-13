@@ -28,16 +28,16 @@ public class MapTileDetails : MonoBehaviour {
 		for (int i = 0; i < MapMovementController.availableAreasArray.Length; i++) {
 			switch(i) {
 			case 0: //Left
-				MapMovementController.availableAreasArray[0] = LeftAreaIsAvailable;
+				MapMovementController.availableAreasArray[i] = LeftAreaIsAvailable;
 				break;
 			case 1: //Top
-				MapMovementController.availableAreasArray[0] = TopAreaIsAvailable;
+				MapMovementController.availableAreasArray[i] = TopAreaIsAvailable;
 				break;
 			case 2: //Right
-				MapMovementController.availableAreasArray[0] = RightAreaIsAvailable;
+				MapMovementController.availableAreasArray[i] = RightAreaIsAvailable;
 				break;
 			case 3: //Bottom
-				MapMovementController.availableAreasArray[0] = BottomAreaIsAvailable;
+				MapMovementController.availableAreasArray[i] = BottomAreaIsAvailable;
 				break;
 			}
 		}
