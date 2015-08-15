@@ -82,4 +82,25 @@ public class PlayerController : MonoBehaviour {
 			return false;
 		}
 	}
+
+	void OnTriggerEnter2D (Collider2D collider) {
+
+	}
+
+	void OnTriggerStay2D (Collider2D collider) {
+		Debug.Log ("I'm in a collider.");
+		if (collider.gameObject.tag == "Item") {
+			Debug.Log ("I'm in an item's collider.");
+			if(EventManager.playerHasControl) {
+				if (Input.GetKey(KeyCode.Space) || CrossPlatformInputManager.GetButtonDown("Jump")){
+					PickUpItem(collider);
+				}
+			}
+		}
+	}
+
+	void PickUpItem(Collider2D collider) {
+		Debug.Log ("I've picked up a "+collider.gameObject.name+".");
+		Destroy (collider.gameObject);
+	}
 }
