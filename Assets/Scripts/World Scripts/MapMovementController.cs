@@ -27,19 +27,10 @@ public class MapMovementController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(!isTransitioning) {
-			playerPositionInPixels = Camera.main.WorldToScreenPoint(playerCharacter.position);
-			if (playerPositionInPixels.x >= Screen.width && availableAreasArray[2] == true) {
-				StartCoroutine(moveCamera(new Vector3(Camera.main.transform.position.x + 16, Camera.main.transform.position.y)));
-				playerCharacter.transform.position = new Vector3(playerCharacter.transform.position.x + 3, playerCharacter.transform.position.y);
-			} else if (playerPositionInPixels.x <= 0 && availableAreasArray[0] == true) {
-				StartCoroutine(moveCamera(new Vector3(Camera.main.transform.position.x - 16, Camera.main.transform.position.y)));
-				playerCharacter.transform.position = new Vector3(playerCharacter.transform.position.x - 3, playerCharacter.transform.position.y);
-			}
-		}
+		
 	}
 
-	IEnumerator moveCamera(Vector3 target) {
+	public IEnumerator moveCamera(Vector3 target) {
 		isTransitioning = true;
 		EventManager.playerHasControl = false;
 

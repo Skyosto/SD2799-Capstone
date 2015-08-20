@@ -41,5 +41,8 @@ public class MapTileDetails : MonoBehaviour {
 				break;
 			}
 		}
+		Debug.Log (MapMovementController.availableAreasArray [0] + " " + MapMovementController.availableAreasArray [1] + " "
+			+ MapMovementController.availableAreasArray [2] + " " + MapMovementController.availableAreasArray [3] +
+			"for " + gameObject.name);
 	}
 }
