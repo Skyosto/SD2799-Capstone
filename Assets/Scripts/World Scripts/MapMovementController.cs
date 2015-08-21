@@ -4,7 +4,6 @@ using System.Collections;
 public class MapMovementController : MonoBehaviour {
 	Transform playerCharacter;
 	Vector3 playerPositionInPixels;
-	Camera camera;
 	float cameraMoveSpeed;
 
 	PlayerController playerController;
@@ -27,7 +26,15 @@ public class MapMovementController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+		if (!isTransitioning) {
+			if (Camera.main.WorldToScreenPoint (playerCharacter.position).x > Screen.width) {
+				playerCharacter.gameObject.transform.position += new Vector3(3,0);
+				StartCoroutine (moveCamera (Camera.main.transform.position + new Vector3 (16, 0)));
+			} else if (Camera.main.WorldToScreenPoint (playerCharacter.position).x < 0) {
+				playerCharacter.gameObject.transform.position -= new Vector3(3,0);
+				StartCoroutine (moveCamera (Camera.main.transform.position - new Vector3 (16, 0)));
+			}
+		}
 	}
 
 	public IEnumerator moveCamera(Vector3 target) {

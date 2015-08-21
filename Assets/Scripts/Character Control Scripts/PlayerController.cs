@@ -50,27 +50,41 @@ public class PlayerController : MonoBehaviour {
 				characterAnimator.SetFloat ("Facing Direction", -1f);
 				characterAnimator.SetBool ("isWalking", true);
 				Vector3 currentPosition = gameObject.transform.position;
-				Vector3 newPosition = new Vector3 (
-					currentPosition.x - (Time.deltaTime * characterSpeed), 
-					currentPosition.y);
-				if(IsPositionOnScreen(newPosition)) {
+				
+				if(MapMovementController.availableAreasArray[0] == true) {
+					Vector3 newPosition = new Vector3 (
+						currentPosition.x - (Time.deltaTime * characterSpeed), 
+						currentPosition.y);
 					gameObject.transform.position = newPosition;
 				}
 				else {
-					gameObject.transform.position = currentPosition;
+					Vector3 edgeOfCamera = new Vector3(0, 0);
+					Debug.Log (Camera.main.ScreenToWorldPoint(edgeOfCamera).x);
+					Vector3 newPosition = new Vector3 (
+					Mathf.Clamp (currentPosition.x - (Time.deltaTime * characterSpeed),Camera.main.ScreenToWorldPoint(edgeOfCamera).x + characterRenderer.bounds.extents.x,9999), 
+						currentPosition.y);
+					gameObject.transform.position = newPosition;
 				}
 			} else if (direction == "Right") {
+				//Start the animation
 				characterAnimator.SetFloat ("Facing Direction", 1f);
 				characterAnimator.SetBool ("isWalking", true);
+
+				//Calculate the next positon
 				Vector3 currentPosition = gameObject.transform.position;
-				Vector3 newPosition = new Vector3 (
-					currentPosition.x + (Time.deltaTime * characterSpeed), 
-					currentPosition.y);
-				if(IsPositionOnScreen(newPosition)) {
+				if(MapMovementController.availableAreasArray[2] == true) {
+					Vector3 newPosition = new Vector3 (
+						currentPosition.x + (Time.deltaTime * characterSpeed), 
+						currentPosition.y);
 					gameObject.transform.position = newPosition;
 				}
 				else {
-					gameObject.transform.position = currentPosition;
+				Vector3 edgeOfCamera = new Vector3(Screen.width, 0);
+				Debug.Log (Camera.main.ScreenToWorldPoint(edgeOfCamera).x);
+					Vector3 newPosition = new Vector3 (
+						Mathf.Clamp (currentPosition.x + (Time.deltaTime * characterSpeed),0,Camera.main.ScreenToWorldPoint(edgeOfCamera).x - characterRenderer.bounds.extents.x), 
+						currentPosition.y);
+					gameObject.transform.position = newPosition;
 				}
 			}
 	}
@@ -86,25 +100,6 @@ public class PlayerController : MonoBehaviour {
 			return true;
 		}
 
-	}
-
-	void OnCollisionEnter2D (Collision2D collider) {
-		Debug.Log ("I triggered the "+collider.gameObject.tag);
-		if(collider.gameObject.tag == "MainCamera") {
-			if (MapMovementController.isTransitioning == false) {
-				Vector3 positionInPixels = Camera.main.WorldToScreenPoint (gameObject.transform.position);
-				if(positionInPixels.x > (Screen.width / 2) && MapMovementController.availableAreasArray[2] == true) {
-					StartCoroutine(mapMovementController.moveCamera(new Vector3(Camera.main.transform.position.x + 16, Camera.main.transform.position.y)));
-					gameObject.transform.position = new Vector3(gameObject.transform.position.x + 3, gameObject.transform.position.y);
-				}
-				else if (positionInPixels.x < (Screen.width / 2) && MapMovementController.availableAreasArray[0] == true) {
-					StartCoroutine(mapMovementController.moveCamera(new Vector3(Camera.main.transform.position.x - 16, Camera.main.transform.position.y)));
-					gameObject.transform.position = new Vector3(gameObject.transform.position.x - 3, gameObject.transform.position.y);
-				}
-				else {
-				}
-			}
-		}
 	}
 
 	void OnTriggerStay2D (Collider2D collider) {
