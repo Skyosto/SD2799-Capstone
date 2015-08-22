@@ -1,11 +1,35 @@
+#STRT_Dialog#
+#SPKR#Rizma:
+Huh?... Where... am I? How did I get here?
+Either way, better get moving. I remember the last time I decided to sit around contemplating life.
+#END_Dialog#
 #PAUSE#
 #STRT_Dialog#
-#SPKR#Skyosto:
-Hello! Welcome to our capstone game.
-This is a dummy text file in order to test the engine we are making.
-Wish me luck!
-#WAIT#2$
-By the way!
-I'm working really hard to make this code extensible in a group setting!
-So, please, bear with me.
+#SPKR#Rizma:
+Yes... let's add to the already odd situation with a metal detector that stands up by itself.
+(sigh) What are the odds?...
+#SPKR#Metal Detector:
+At this rate, I would say pretty favorable actually. Now if you don't mind, I am trying to rest.
+#SPKR#Rizma:
+But... you're a metal detector...
+#SPKR#Metal Detector:
+And you keep talking to yourself. I didn't realize we were pointing out the obvious flaws in our sanity.
+#SPKR#Rizma:
+This can't be real!
+#SPKR#Metal Detector:
+Yet you are still keeping me awake with your chatter. Kindly GO AWAY NOW!
+#SPKR#Rizma:
+Wait, you mentioned the odds being favorable. What did you mean by that?
+Besides your astonishingly great personality, I felt an ounce of truth in your words.
+#SPKR#Metal Detector:
+So not only do I no longer get to rest but you want me to actually talk to you?
+You realize I AM a metal detector right?
+#SPKR#Rizma:
+Yes.
+#SPKR#Metal Detector:
+And you're not questioning your already seemingly shaky sanity?
+#SPKR#Rizma:
+Well...
+#SPKR#Metal Detector:
+Great, you're just the person I need! Pleased to meet you, my name is ...
 #END_Dialog#

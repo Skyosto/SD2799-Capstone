@@ -145,14 +145,14 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 11454916, guid: 8a4ea3fb3704c274c8f10715b82c97b1, type: 2}
-        m_MethodName: LoadNextLevel
-        m_Mode: 1
+        m_MethodName: LoadLevel
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: Game
+          m_StringArgument: 02 Introduction
           m_BoolArgument: 0
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
@@ -968,7 +968,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1818601950}
+      - m_Target: {fileID: 11454916, guid: 8a4ea3fb3704c274c8f10715b82c97b1, type: 2}
         m_MethodName: LoadLevel
         m_Mode: 5
         m_Arguments:
@@ -976,7 +976,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: Load Menu
+          m_StringArgument: 01b Load Menu
           m_BoolArgument: 0
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
@@ -1008,12 +1008,6 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1768198952}
---- !u!114 &1818601950 stripped
-MonoBehaviour:
-  m_PrefabParentObject: {fileID: 11454916, guid: 8a4ea3fb3704c274c8f10715b82c97b1,
-    type: 2}
-  m_PrefabInternal: {fileID: 706289806}
-  m_Script: {fileID: 11500000, guid: 77730870dea2a994ca855f84085eb21a, type: 3}
 --- !u!1001 &1944171359
 Prefab:
   m_ObjectHideFlags: 0

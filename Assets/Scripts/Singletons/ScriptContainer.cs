@@ -42,7 +42,7 @@ public class ScriptContainer : MonoBehaviour {
 	}
 
 	void OnLevelWasLoaded(int level) {
-		if (level != 2 && level != 0) {
+		if (level != 2 && level != 0 && level != 1) {
 			LoadScript (level);
 			ParseScriptIntoLines ();
 			FilterScriptForKeys (dialogLines);
@@ -55,7 +55,7 @@ public class ScriptContainer : MonoBehaviour {
 
 	void LoadScript(int level) {
 		switch (level) {
-		case 1:
+		case 3:
 			currentScript = Resources.Load(pathToDialogScripts+"Introduction") as TextAsset;
 			break;
 		}

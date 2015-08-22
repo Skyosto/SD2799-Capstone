@@ -21,6 +21,7 @@ public class PlayerController : MonoBehaviour {
 		mapMovementController = Camera.main.GetComponent<MapMovementController>();
 		playerPosition = gameObject.transform;
 		positionBufferValues = characterRenderer.bounds.extents;
+		EventManager.playerHasControl = false;
 	}
 	
 	// Update is called once per frame
@@ -112,10 +113,24 @@ public class PlayerController : MonoBehaviour {
 				}
 			}
 		}
+		if (collider.gameObject.tag == "NPC") {
+			Debug.Log ("I'm in an NPC's collider.");
+			if(EventManager.playerHasControl) {
+				if (Input.GetKey(KeyCode.Space) || CrossPlatformInputManager.GetButtonDown("Jump")){
+					TalkToNPC(collider);
+				}
+			}
+		}
 	}
 
 	void PickUpItem(Collider2D collider) {
 		Debug.Log ("I've picked up a "+collider.gameObject.name+".");
 		Destroy (collider.gameObject);
+	}
+
+	void TalkToNPC(Collider2D collider) {
+		Debug.Log ("I'm talking to a "+collider.gameObject.name+".");
+		EventManager.playerHasControl = false;
+		EventManager.isScriptPaused = false;
 	}
 }

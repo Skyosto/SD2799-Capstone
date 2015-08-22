@@ -48,6 +48,9 @@ public class EventManager : MonoBehaviour {
 		FindSingletons ();
 	}
 
+	void Start() {
+	}
+
 
 	void OnLevelWasLoaded(int level) {
 
@@ -99,6 +102,7 @@ public class EventManager : MonoBehaviour {
 								//Is the dialog panel currently typing dialog?
 								if(isEndOfScript) {
 									Debug.Log ("We have reached the end of the script. Load next level.");
+									LoadNextLevel();
 									return;
 								}
 								if (!isDialogTyping) {
@@ -154,7 +158,8 @@ public class EventManager : MonoBehaviour {
 	void CheckIfInMainMenus() {
 		int[] MainMenus = {
 			0,
-			2
+			1,
+			2,
 		};
 		for (int i = 0; i < MainMenus.Length; i++) {
 			if(MainMenus[i] == Application.loadedLevel) {
@@ -184,6 +189,9 @@ public class EventManager : MonoBehaviour {
 	}
 
 	public void LoadLevel(string name) {
+		if(Application.loadedLevel != 1 || Application.loadedLevel != 2){
+		}
+		
 		Application.LoadLevel (name);
 	}
 
@@ -235,6 +243,7 @@ public class EventManager : MonoBehaviour {
 			Debug.Log ("Pausing script 'Execution'.");
 			currentLine = scriptContainer.FilterKeyInLine (key, currentLine);
 			isScriptPaused = true;
+			playerHasControl = true;
 			break;
 		}
 	}

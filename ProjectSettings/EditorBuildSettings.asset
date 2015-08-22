@@ -8,6 +8,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Scenes/01a Start Menu.unity
   - enabled: 1
-    path: Assets/_Scenes/02 Introduction.unity
+    path: Assets/_Scenes/01b Load Menu.unity
   - enabled: 1
     path: Assets/_Scenes/01c Options Menu.unity
+  - enabled: 1
+    path: Assets/_Scenes/02 Introduction.unity
+  - enabled: 1
+    path: Assets/_Scenes/03 Rizma's Bedroom.unity
