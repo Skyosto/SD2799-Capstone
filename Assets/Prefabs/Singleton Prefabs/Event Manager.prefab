@@ -32,6 +32,7 @@ MonoBehaviour:
   musicManager: {fileID: 0}
   fadePanel: {fileID: 0}
   cutsceneController: {fileID: 0}
+  fadeCanvas: {fileID: 11411406, guid: 9a06a2661a51e7e408895280efcbe04d, type: 2}
 --- !u!224 &22407898
 RectTransform:
   m_ObjectHideFlags: 1

@@ -17,7 +17,7 @@ public class ScriptContainer : MonoBehaviour {
 		"#PAUSE#",
 		"#CHAR-A#",
 		"#CHAR-B#",
-		"#FADE_IN#",
+		"#WHITE_OUT#",
 		"#FADE_OUT#"
 	};
 
@@ -145,7 +145,7 @@ public class ScriptContainer : MonoBehaviour {
 		else if (key == dialogKeys [5]) { //#PAUSE#
 			line = line.Replace(dialogKeys[5], "");
 		}
-		else if (key == dialogKeys [8]) { //#PAUSE#
+		else if (key == dialogKeys [8]) { //#WHITE_OUT#
 			line = line.Replace(dialogKeys[8], "");
 		}
 		else if (key == dialogKeys [9]) { //#PAUSE#

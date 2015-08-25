@@ -27,6 +27,7 @@ public class EventManager : MonoBehaviour {
 	public static ScriptContainer scriptContainer;
 	public GameObject fadePanel;
 	public CutsceneController cutsceneController;
+	public FadeCanvas fadeCanvas;
 	#endregion	
 	#region WAIT timers
 	public static float waitTime;
@@ -244,6 +245,10 @@ public class EventManager : MonoBehaviour {
 			currentLine = scriptContainer.FilterKeyInLine (key, currentLine);
 			isScriptPaused = true;
 			playerHasControl = true;
+			break;
+		case "#WHITE_OUT#":
+			Debug.Log ("Whiting out the screen.");
+			fadeCanvas.WhiteOut();
 			break;
 		}
 	}
