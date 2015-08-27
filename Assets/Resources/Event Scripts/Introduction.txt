@@ -1,3 +1,4 @@
+#BLACK_IN#
 #STRT_Dialog#
 #SPKR#Rizma:
 Huh?... Where... am I? How did I get here?
@@ -32,6 +33,57 @@ And you're not questioning your already seemingly shaky sanity?
 Well...
 #SPKR#Metal Detector:
 Great, you're just the person I need! Pleased to meet you, my name is ...
+#WAIT#2$
+#SPKR#Metal Detector:
+I knew it! It was here the entire time!
 #END_Dialog#
 #WHITE_OUT#
+#WHITE_IN#
+#STRT_Dialog#
+#SPKR#Shovel:
+Well don't just stare at me. Help a shovel out and get to digging.
+#SPKR#Rizma:
+With what? My hands?
+#SPKR#Shovel:
+You do have two of them...
+#SPKR#Rizma:
+No.
+#SPKR#Shovel:
+Okay Mr.Sassypants. There should be another shovel around here somewhere. Go look over by that shed.
+#SPKR#Rizma:
+We are in the middle of a deserted beach.
+I highly doubt there is anything out here, much less an entire sh...
+#END_Dialog#
+#WAIT#3$
+#STRT_Dialog#
+#SPKR#Rizma:
+Of course...
+#END_Dialog#
 #PAUSE#
+#STRT_Dialog#
+#SPKR#Rizma:
+You know, for a magic shovel that appears in the middle of nowhere, 
+you'd think it would appear a bit less... oh I don't know... old and rusty.
+#SPKR#Shovel:
+...
+#SPKR#Shovel:
+Finally! I guess my memory hasn't entirely dissipated just yet. The three eggs.
+#END_Dialog#
+#WHITE_OUT#
+#WHITE_IN#
+#STRT_Dialog#
+#SPKR#Rizma:
+(staring in awe or maybe it's shock?) ...
+#SPKR#Unknown:
+At last...onward my journey continues. 
+For my heart longs to find that which resides in her mind's venues.
+#SPKR#Unknown:
+Thank you kind soul but I must be swift in my actions. 
+For if I stay here too long, my body will soon be mere rations.
+#SPKR#Rizma:
+Wait... who are you?
+#SPKR#Unknown:
+I am a soulless wanderer burdened with finding a clue, 
+but for now you must leave me, forget not Rizma, my only friend is you.
+#END_Dialog#
+#BLACK_OUT#

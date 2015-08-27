@@ -250,6 +250,18 @@ public class EventManager : MonoBehaviour {
 			Debug.Log ("Whiting out the screen.");
 			fadeCanvas.WhiteOut();
 			break;
+		case "#WHITE_IN#":
+			Debug.Log ("Whiting into the screen.");
+			fadeCanvas.WhiteIn();
+			break;
+		case "#BLACK_IN#":
+			Debug.Log ("Blacking into the screen.");
+			fadeCanvas.BlackIn();
+			break;
+		case "#BLACK_OUT#":
+			Debug.Log ("Blacking out the screen.");
+			fadeCanvas.BlackOut();
+			break;
 		}
 	}
 

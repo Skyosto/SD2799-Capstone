@@ -20,38 +20,110 @@ public class FadeCanvas : MonoBehaviour {
 		RectTransform whitePanel = null;
 
 		foreach (RectTransform child in fadeCanvas.transform) {
-			if (child.name == "White Panel") {
+			if (child.tag == "White Panel") {
 				whitePanel = child;
 				break;
 			}
 		}
+
+		Debug.Log ("Does a white panel exist?: "+whitePanel == null);
 
 		if(whitePanel == null) {
 			whitePanel = Object.Instantiate(fadingPanels[2]);
 			whitePanel.SetParent(fadeCanvas.transform);
 			whitePanel.transform.position = fadeCanvas.transform.position;
 			whitePanel.sizeDelta = new Vector2(100, 100);
-			fadeCanvas.StartCoroutine(WhiteOutAnimation(whitePanel));
 		}
+
+		//fadeCanvas.StartCoroutine(WhiteOutAnimation(whitePanel));
+		EventManager.animationIsPlaying = true;
+		Animator whitePanelAnimator = whitePanel.GetComponent<Animator> ();
+		whitePanelAnimator.SetFloat ("Alpha", 0f);
+		whitePanelAnimator.SetTrigger ("Fade Out");
+		whitePanelAnimator.SetFloat ("Alpha", 1f);
+
 	}
 
-	IEnumerator WhiteOutAnimation(RectTransform whiteOutPanel) {
-		EventManager.animationIsPlaying = true;
-		Image whiteOutPanelColor = whiteOutPanel.GetComponent<Image> ();
-		Color currentColor = whiteOutPanelColor.color;
-		currentColor.a = 0;
-		float timeWaited = 0f;
-		float whiteOutTime = 5.0f;
-
-
-		while (whiteOutPanelColor.color.a < 255) {
-			timeWaited += Time.deltaTime;
-			currentColor.a += 1;
-			whiteOutPanelColor.color = currentColor;
-			yield return 0;
+	public void WhiteIn() { 
+		FadeCanvas fadeCanvas = FindObjectOfType<FadeCanvas>();
+		RectTransform whitePanel = null;
+		
+		foreach (RectTransform child in fadeCanvas.transform) {
+			if (child.tag == "White Panel") {
+				whitePanel = child;
+				break;
+			}
 		}
+		
+		if(whitePanel == null) {
+			whitePanel = Object.Instantiate(fadingPanels[2]);
+			whitePanel.SetParent(fadeCanvas.transform);
+			whitePanel.transform.position = fadeCanvas.transform.position;
+			whitePanel.sizeDelta = new Vector2(100, 100);
+		}
+		
+		//fadeCanvas.StartCoroutine(WhiteOutAnimation(whitePanel));
+		Animator whitePanelAnimator = whitePanel.GetComponent<Animator> ();
+		EventManager.animationIsPlaying = true;
+		whitePanelAnimator.SetFloat ("Alpha", 1f);
+		whitePanelAnimator.SetTrigger ("Fade In");
+		whitePanelAnimator.SetFloat ("Alpha", 0f);
 
-		Destroy(whiteOutPanel.gameObject);
-		EventManager.animationIsPlaying = false;
+	}
+
+	public void BlackOut() { 
+		FadeCanvas fadeCanvas = FindObjectOfType<FadeCanvas>();
+		RectTransform blackPanel = null;
+		
+		foreach (RectTransform child in fadeCanvas.transform) {
+			if (child.tag == "Black Panel") {
+				blackPanel = child;
+				break;
+			}
+		}
+		
+		Debug.Log ("Does a black panel exist?: "+blackPanel == null);
+		
+		if(blackPanel == null) {
+			blackPanel = Object.Instantiate(fadingPanels[0]);
+			blackPanel.SetParent(fadeCanvas.transform);
+			blackPanel.transform.position = fadeCanvas.transform.position;
+			blackPanel.sizeDelta = new Vector2(100, 100);
+		}
+		
+		//fadeCanvas.StartCoroutine(WhiteOutAnimation(whitePanel));
+		EventManager.animationIsPlaying = true;
+		Animator whitePanelAnimator = blackPanel.GetComponent<Animator> ();
+		whitePanelAnimator.SetFloat ("Alpha", 0f);
+		whitePanelAnimator.SetTrigger ("Black Out");
+		whitePanelAnimator.SetFloat ("Alpha", 1f);
+		
+	}
+	
+	public void BlackIn() { 
+		FadeCanvas fadeCanvas = FindObjectOfType<FadeCanvas>();
+		RectTransform blackPanel = null;
+		
+		foreach (RectTransform child in fadeCanvas.transform) {
+			if (child.tag == "Black Panel") {
+				blackPanel = child;
+				break;
+			}
+		}
+		
+		if(blackPanel == null) {
+			blackPanel = Object.Instantiate(fadingPanels[0]);
+			blackPanel.SetParent(fadeCanvas.transform);
+			blackPanel.transform.position = fadeCanvas.transform.position;
+			blackPanel.sizeDelta = new Vector2(100, 100);
+		}
+		
+		//fadeCanvas.StartCoroutine(WhiteOutAnimation(whitePanel));
+		Animator whitePanelAnimator = blackPanel.GetComponent<Animator> ();
+		EventManager.animationIsPlaying = true;
+		whitePanelAnimator.SetFloat ("Alpha", 1f);
+		whitePanelAnimator.SetTrigger ("Black In");
+		whitePanelAnimator.SetFloat ("Alpha", 0f);
+		
 	}
 }

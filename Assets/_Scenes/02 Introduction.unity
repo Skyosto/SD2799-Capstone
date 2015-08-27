@@ -260,10 +260,6 @@ Prefab:
       propertyPath: m_Pivot.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 132294, guid: 9a06a2661a51e7e408895280efcbe04d, type: 2}
-      propertyPath: m_Name
-      value: Fade Canvas
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 9a06a2661a51e7e408895280efcbe04d, type: 2}
   m_IsPrefabParent: 0

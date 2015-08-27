@@ -18,7 +18,9 @@ public class ScriptContainer : MonoBehaviour {
 		"#CHAR-A#",
 		"#CHAR-B#",
 		"#WHITE_OUT#",
-		"#FADE_OUT#"
+		"#WHITE_IN#",
+		"#BLACK_IN#",
+		"#BLACK_OUT#"
 	};
 
 	public string[] dialogLines;
@@ -148,8 +150,14 @@ public class ScriptContainer : MonoBehaviour {
 		else if (key == dialogKeys [8]) { //#WHITE_OUT#
 			line = line.Replace(dialogKeys[8], "");
 		}
-		else if (key == dialogKeys [9]) { //#PAUSE#
+		else if (key == dialogKeys [9]) { //#WHITE_IN#
 			line = line.Replace(dialogKeys[9], "");
+		}
+		else if (key == dialogKeys [10]) { //#BLACK_IN#
+			line = line.Replace(dialogKeys[10], "");
+		}
+		else if (key == dialogKeys [11]) { //#BLACK_OUT#
+			line = line.Replace(dialogKeys[11], "");
 		}
 		else {
 			Debug.LogError(key+" is not valid a valid dialog key.");
