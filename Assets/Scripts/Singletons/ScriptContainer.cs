@@ -6,6 +6,7 @@ public class ScriptContainer : MonoBehaviour {
 
 	static ScriptContainer instance = null;
 	private TextAsset currentScript;
+	CutsceneController cutsceneController;
 
 	private string pathToDialogScripts = "Event Scripts/";
 	private string[] dialogKeys = {
@@ -20,7 +21,9 @@ public class ScriptContainer : MonoBehaviour {
 		"#WHITE_OUT#",
 		"#WHITE_IN#",
 		"#BLACK_IN#",
-		"#BLACK_OUT#"
+		"#BLACK_OUT#",
+		"#ORP#",
+		"#SPAWN#"
 	};
 
 	public string[] dialogLines;
@@ -49,6 +52,11 @@ public class ScriptContainer : MonoBehaviour {
 			ParseScriptIntoLines ();
 			FilterScriptForKeys (dialogLines);
 		}
+		FindSingletons ();
+	}
+
+	void FindSingletons() {
+		cutsceneController = FindObjectOfType<CutsceneController> ();
 	}
 	
 	// Update is called once per frame
@@ -59,6 +67,9 @@ public class ScriptContainer : MonoBehaviour {
 		switch (level) {
 		case 3:
 			currentScript = Resources.Load(pathToDialogScripts+"Introduction") as TextAsset;
+			break;
+		case 4:
+			currentScript = Resources.Load(pathToDialogScripts+"Rizmas_Bedroom") as TextAsset;
 			break;
 		}
 	}
@@ -128,36 +139,73 @@ public class ScriptContainer : MonoBehaviour {
 			currentSpeaker = line.Substring (0, line.IndexOf (':'));
 			line = line.Replace (currentSpeaker + ":", "");
 
-		} 
-		else if (key == dialogKeys [2]) { //#STRT_Dialog#
-			line = line.Replace(dialogKeys[2], "");
-		}
-		else if (key == dialogKeys [3]) { //#END_Dialog#
-			line = line.Replace(dialogKeys[3], "");
-		}
-		else if (key == dialogKeys[4]) { //#WAIT#
+		} else if (key == dialogKeys [2]) { //#STRT_Dialog#
+			line = line.Replace (dialogKeys [2], "");
+		} else if (key == dialogKeys [3]) { //#END_Dialog#
+			line = line.Replace (dialogKeys [3], "");
+		} else if (key == dialogKeys [4]) { //#WAIT#
 			float time;
 			//Remove key
-			line = line.Replace(dialogKeys[4], "");
-			string timeString = line.Substring(0,line.IndexOf('$'));
-			time = Convert.ToSingle(timeString);
-			line = line.Replace(timeString+"$","");
+			line = line.Replace (dialogKeys [4], "");
+			string timeString = line.Substring (0, line.IndexOf ('$'));
+			time = Convert.ToSingle (timeString);
+			line = line.Replace (timeString + "$", "");
 			EventManager.waitTime = time;
-		}
-		else if (key == dialogKeys [5]) { //#PAUSE#
-			line = line.Replace(dialogKeys[5], "");
-		}
-		else if (key == dialogKeys [8]) { //#WHITE_OUT#
-			line = line.Replace(dialogKeys[8], "");
-		}
-		else if (key == dialogKeys [9]) { //#WHITE_IN#
-			line = line.Replace(dialogKeys[9], "");
-		}
-		else if (key == dialogKeys [10]) { //#BLACK_IN#
-			line = line.Replace(dialogKeys[10], "");
-		}
-		else if (key == dialogKeys [11]) { //#BLACK_OUT#
-			line = line.Replace(dialogKeys[11], "");
+		} else if (key == dialogKeys [5]) { //#PAUSE#
+			line = line.Replace (dialogKeys [5], "");
+		} else if (key == dialogKeys [8]) { //#WHITE_OUT#
+			line = line.Replace (dialogKeys [8], "");
+		} else if (key == dialogKeys [9]) { //#WHITE_IN#
+			line = line.Replace (dialogKeys [9], "");
+		} else if (key == dialogKeys [10]) { //#BLACK_IN#
+			line = line.Replace (dialogKeys [10], "");
+		} else if (key == dialogKeys [11]) { //#BLACK_OUT#
+			line = line.Replace (dialogKeys [11], "");
+		} else if (key == dialogKeys [12]) { //#ORP#
+			line = line.Replace (dialogKeys [12], "");
+			Debug.Log ("Found Orp key.");
+			if(line.Contains("&CHANGE&")) {
+				Debug.Log ("Found change for orp key.");
+				line = line.Replace ("&CHANGE&", "");
+				if(line.Contains("%shovel%")){
+					Debug.Log ("Tell to change to shovel.");
+					line = line.Replace ("%shovel%", "");
+					CutsceneController.orpForm = "shovel";
+				}
+			}
+		} else if (key == dialogKeys [13]) { //#SPAWN#
+			line = line.Replace (dialogKeys [13], "");
+			String whatToSpawn = "";
+			Vector3 position;
+			Debug.Log ("Found Spawn key.");
+			if(line.Contains("&OBJECT&")) {
+				Debug.Log ("Spawning object.");
+				line = line.Replace ("&OBJECT&", "");
+				if(line.Contains("%shed%")){
+					Debug.Log ("Spawning shed.");
+					whatToSpawn = "shed";
+					line = line.Replace ("%shed%", "");
+				}
+			}
+			if(line.Contains("&ITEM&")) {
+				Debug.Log ("Spawning item.");
+				line = line.Replace ("&ITEM&", "");
+				if(line.Contains("%shovel%")){
+					Debug.Log ("Spawning shovel.");
+					whatToSpawn = "shovel";
+					line = line.Replace ("%shovel%", "");
+				}
+			}
+			String[] coordinates = line.Split(',');
+			float coordinateX = Convert.ToSingle(coordinates[0]);
+			float coordinateY = Convert.ToSingle(coordinates[1]);
+			position = new Vector3(coordinateX, coordinateY);
+			if(whatToSpawn != "" && position != null) {
+				cutsceneController.SpawnObject(whatToSpawn, position);
+			}
+			else {
+				Debug.LogError("Could not spawn an object, please check your perameters.");
+			}
 		}
 		else {
 			Debug.LogError(key+" is not valid a valid dialog key.");

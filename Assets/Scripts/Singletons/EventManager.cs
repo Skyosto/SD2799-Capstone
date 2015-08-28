@@ -248,19 +248,28 @@ public class EventManager : MonoBehaviour {
 			break;
 		case "#WHITE_OUT#":
 			Debug.Log ("Whiting out the screen.");
-			fadeCanvas.WhiteOut();
+			fadeCanvas.WhiteOut ();
 			break;
 		case "#WHITE_IN#":
 			Debug.Log ("Whiting into the screen.");
-			fadeCanvas.WhiteIn();
+			fadeCanvas.WhiteIn ();
 			break;
 		case "#BLACK_IN#":
 			Debug.Log ("Blacking into the screen.");
-			fadeCanvas.BlackIn();
+			fadeCanvas.BlackIn ();
 			break;
 		case "#BLACK_OUT#":
 			Debug.Log ("Blacking out the screen.");
-			fadeCanvas.BlackOut();
+			fadeCanvas.BlackOut ();
+			break;
+		case "#ORP#":
+			Debug.Log ("Doing cutscene stuff with orp.");
+			currentLine = scriptContainer.FilterKeyInLine (key, currentLine);
+			cutsceneController.ChangeOrpForm (CutsceneController.orpForm);
+			break;
+		case "#SPAWN#":
+			Debug.Log ("Spawning stuff");
+			currentLine = scriptContainer.FilterKeyInLine (key, currentLine);
 			break;
 		}
 	}

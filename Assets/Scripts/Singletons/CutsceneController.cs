@@ -9,6 +9,10 @@ public class CutsceneController : MonoBehaviour {
 
 	public GameObject[] charactersArray;
 
+	public static string orpForm = "";
+	public Sprite[] orpFormsArray;
+	public GameObject[] itemsArray;
+
 	void Awake () {
 		//Start the singleton pattern
 		if (instance != null && instance != this) {
@@ -47,6 +51,28 @@ public class CutsceneController : MonoBehaviour {
 	//	1 = East
 	//	2 = South
 	//	3 = West
-	void MoveCharacterToPosition(GameObject character, Vector3 position, int direction) {
+	public void MoveCharacterToPosition(GameObject character, Vector3 position, int direction) {
+	}
+
+	public void ChangeOrpForm(string form) {
+		GameObject orpObject = GameObject.Find ("Orp");
+		SpriteRenderer orpRenderer = orpObject.GetComponent<SpriteRenderer>();
+		BoxCollider2D orpCollider = orpObject.GetComponent<BoxCollider2D> ();
+		switch(form) {
+		case "shovel":
+			orpRenderer.sprite = orpFormsArray[0];
+			orpObject.transform.localScale = new Vector3 (5f,5f);
+			orpCollider.size = new Vector3 (0.35f, 0.35f);
+			break;
+		}
+	}
+
+	public void SpawnObject(string name, Vector3 position) {
+		if(name == "shed") {
+			Object.Instantiate(itemsArray[0], new Vector3(position.x, position.y, 2f), Quaternion.identity);
+		}
+		if(name == "shovel") {
+			Object.Instantiate(itemsArray[1], new Vector3(position.x, position.y, 1f), Quaternion.identity);
+		}
 	}
 }

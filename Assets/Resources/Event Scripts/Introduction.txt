@@ -38,6 +38,7 @@ Great, you're just the person I need! Pleased to meet you, my name is ...
 I knew it! It was here the entire time!
 #END_Dialog#
 #WHITE_OUT#
+#ORP#&CHANGE&%shovel%
 #WHITE_IN#
 #STRT_Dialog#
 #SPKR#Shovel:
@@ -54,6 +55,8 @@ Okay Mr.Sassypants. There should be another shovel around here somewhere. Go loo
 We are in the middle of a deserted beach.
 I highly doubt there is anything out here, much less an entire sh...
 #END_Dialog#
+#SPAWN#&OBJECT&%shed%36.12,2.5
+#SPAWN#&ITEM&%shovel%35.8,1.75
 #WAIT#3$
 #STRT_Dialog#
 #SPKR#Rizma:
@@ -66,6 +69,12 @@ You know, for a magic shovel that appears in the middle of nowhere,
 you'd think it would appear a bit less... oh I don't know... old and rusty.
 #SPKR#Shovel:
 ...
+#SPKR# :
+(Both beings continue to dig for a few minutes in pure silence.)
+#SPKR#Shovel:
+A simple thank you would have sufficed.
+#SPKR#Rizma:
+Wait, you did that...
 #SPKR#Shovel:
 Finally! I guess my memory hasn't entirely dissipated just yet. The three eggs.
 #END_Dialog#

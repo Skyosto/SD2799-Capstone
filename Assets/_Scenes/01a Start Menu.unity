@@ -1057,17 +1057,13 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 11427842, guid: a87bfa565f91df04fa737ea4464ee1a4, type: 2}
-      propertyPath: charactersArray.Array.size
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 463210, guid: a87bfa565f91df04fa737ea4464ee1a4, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 6.48999977
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 463210, guid: a87bfa565f91df04fa737ea4464ee1a4, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 3.30999994
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 463210, guid: a87bfa565f91df04fa737ea4464ee1a4, type: 2}
       propertyPath: m_LocalPosition.z
