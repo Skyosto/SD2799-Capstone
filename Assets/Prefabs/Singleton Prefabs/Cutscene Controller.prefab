@@ -47,13 +47,18 @@ MonoBehaviour:
   itemsArray:
   - {fileID: 102128, guid: f42158a466bdeeb4aaa9317c5a4c275f, type: 2}
   - {fileID: 143736, guid: 509519e8b6b52ec4da65227722136366, type: 2}
+  - {fileID: 186708, guid: aa787f798c7485648b302344e10d1cdc, type: 2}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: itemsArray.Array.size
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 163948}

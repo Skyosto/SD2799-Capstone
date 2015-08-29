@@ -74,5 +74,8 @@ public class CutsceneController : MonoBehaviour {
 		if(name == "shovel") {
 			Object.Instantiate(itemsArray[1], new Vector3(position.x, position.y, 1f), Quaternion.identity);
 		}
+		if (name == "turtleEggs") {
+			Object.Instantiate(itemsArray[2], new Vector3(position.x, position.y, 1f), Quaternion.identity);
+		}
 	}
 }

@@ -39,6 +39,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: efbe6196532583c49b669de1f6b1218c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  musicManager: {fileID: 0}
   dialogLines: []
   currentSpeaker: 
 --- !u!1001 &100100000

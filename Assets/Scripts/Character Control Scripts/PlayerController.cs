@@ -12,6 +12,8 @@ public class PlayerController : MonoBehaviour {
 	Animator characterAnimator;
 	SpriteRenderer characterRenderer;
 
+	Inventroy inventory;
+
 
 	// Use this for initialization
 	void Start () {
@@ -22,6 +24,8 @@ public class PlayerController : MonoBehaviour {
 		playerPosition = gameObject.transform;
 		positionBufferValues = characterRenderer.bounds.extents;
 		EventManager.playerHasControl = false;
+
+		inventory = GetComponent<Inventroy> ();
 	}
 	
 	// Update is called once per frame
@@ -125,12 +129,21 @@ public class PlayerController : MonoBehaviour {
 
 	void PickUpItem(Collider2D collider) {
 		Debug.Log ("I've picked up a "+collider.gameObject.name+".");
-		Destroy (collider.gameObject);
+		inventory.AddItemToInventory (collider.gameObject);
+		collider.gameObject.transform.position = new Vector3 (-1000,-1000);
+		Debug.Log ("I need a: "+EventManager.itemNeeded);
+		EventManager.hasItemNeeded = true;
+		//collider.gameObject.SetActive (false);
+		//Destroy (collider.gameObject);
 	}
 
 	void TalkToNPC(Collider2D collider) {
-		Debug.Log ("I'm talking to a "+collider.gameObject.name+".");
-		EventManager.playerHasControl = false;
-		EventManager.isScriptPaused = false;
+		Debug.Log ("Do I have what I need? "+EventManager.hasItemNeeded);
+		if(EventManager.hasItemNeeded == true) {
+			Debug.Log ("I'm talking to a "+collider.gameObject.name+".");
+			EventManager.playerHasControl = false;
+			EventManager.isScriptPaused = false;
+		}
 	}
+
 }

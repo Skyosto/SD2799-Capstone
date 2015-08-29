@@ -19,6 +19,8 @@ public class EventManager : MonoBehaviour {
 	public static bool playerHasControl;
 	public static bool isDialogTyping;
 	public static bool animationIsPlaying;
+	public static bool hasItemNeeded = true;
+	public static string itemNeeded = "";
 	#endregion
 	#region Components & GameObjects
 	public DialogPanel dialogPanel;
@@ -28,6 +30,7 @@ public class EventManager : MonoBehaviour {
 	public GameObject fadePanel;
 	public CutsceneController cutsceneController;
 	public FadeCanvas fadeCanvas;
+	public Inventroy playerInventory;
 	#endregion	
 	#region WAIT timers
 	public static float waitTime;
@@ -130,7 +133,7 @@ public class EventManager : MonoBehaviour {
 						Debug.Log ("Waiting for wait timer to expire..");
 					}
 				} else {
-					Debug.Log("Player currently has control over character. Stopping this line of execution.");
+				Debug.Log("Player currently has control over character. Stopping this line of execution.");
 				}
 			} else {
 				Debug.Log ("Script is paused...");
@@ -271,6 +274,27 @@ public class EventManager : MonoBehaviour {
 			Debug.Log ("Spawning stuff");
 			currentLine = scriptContainer.FilterKeyInLine (key, currentLine);
 			break;
+		case "#REQUIRES#":
+			Debug.Log ("Spawning stuff");
+			currentLine = scriptContainer.FilterKeyInLine (key, currentLine);
+			playerInventory = FindObjectOfType<Inventroy> ();
+			playerHasControl = true;
+			hasItemNeeded = false;
+			itemNeeded = currentLine;
+			break;
+		case "#PLAY_MUSIC#":
+			currentLine = scriptContainer.FilterKeyInLine (key, currentLine);
+			Debug.Log ("Playing new music. "+currentLine);
+			//PlayNewMusic(currentLine);
+			break;
+		}
+	}
+
+	void PlayNewMusic(string name) {
+		switch (name) {
+		case "Meeting Orp":
+			musicManager.PlayMusic(3);
+			break;
 		}
 	}
 
@@ -282,5 +306,15 @@ public class EventManager : MonoBehaviour {
 		isWaitingForTimer = false;
 		waitTime = 0;
 		timeWaited = 0;
+	}
+
+	IEnumerator WaitForItemToBeObtained(string name) {
+
+		Debug.Log ("The inventory belongs to: "+playerInventory.name);
+
+		while(playerInventory.HasItemInInventory(name) == false) {
+			yield return 0;
+		}
+		hasItemNeeded = true;
 	}
 }

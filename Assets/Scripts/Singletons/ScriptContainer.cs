@@ -7,6 +7,7 @@ public class ScriptContainer : MonoBehaviour {
 	static ScriptContainer instance = null;
 	private TextAsset currentScript;
 	CutsceneController cutsceneController;
+	public GameObject musicManager;
 
 	private string pathToDialogScripts = "Event Scripts/";
 	private string[] dialogKeys = {
@@ -23,7 +24,9 @@ public class ScriptContainer : MonoBehaviour {
 		"#BLACK_IN#",
 		"#BLACK_OUT#",
 		"#ORP#",
-		"#SPAWN#"
+		"#SPAWN#",
+		"#REQUIRES#",
+		"#PLAY_MUSIC#"
 	};
 
 	public string[] dialogLines;
@@ -173,7 +176,7 @@ public class ScriptContainer : MonoBehaviour {
 					CutsceneController.orpForm = "shovel";
 				}
 			}
-		} else if (key == dialogKeys [13]) { //#SPAWN#
+		} else if (key == dialogKeys [13]) { //#SPAWN# 
 			line = line.Replace (dialogKeys [13], "");
 			String whatToSpawn = "";
 			Vector3 position;
@@ -185,6 +188,11 @@ public class ScriptContainer : MonoBehaviour {
 					Debug.Log ("Spawning shed.");
 					whatToSpawn = "shed";
 					line = line.Replace ("%shed%", "");
+				}
+				if(line.Contains("%turtleEggs%")){
+					Debug.Log ("Spawning turtle eggs.");
+					whatToSpawn = "turtleEggs";
+					line = line.Replace ("%turtleEggs%", "");
 				}
 			}
 			if(line.Contains("&ITEM&")) {
@@ -205,6 +213,15 @@ public class ScriptContainer : MonoBehaviour {
 			}
 			else {
 				Debug.LogError("Could not spawn an object, please check your perameters.");
+			}
+		} else if (key == dialogKeys [14]) { //#REQUIRES#
+			line = line.Replace (dialogKeys [14], "");
+		} else if (key == dialogKeys [15]) { //#PLAY_MUSIC#
+			line = line.Replace (dialogKeys [15], "");
+			musicManager = GameObject.Find ("Music Manager");
+			MusicManager musicManagerScript = musicManager.GetComponent<MusicManager>();
+			if(line == "Meeting Orp") {
+				musicManagerScript.PlayMusic(3);
 			}
 		}
 		else {

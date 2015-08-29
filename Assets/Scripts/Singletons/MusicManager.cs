@@ -30,6 +30,7 @@ public class MusicManager : MonoBehaviour {
 	}
 
 	void OnLevelWasLoaded(int level) {
+		audioSource = GetComponent<AudioSource> ();
 		if (instance == this) {
 			switch (level) {
 			case 0:
@@ -37,6 +38,9 @@ public class MusicManager : MonoBehaviour {
 				break;
 			case 2:
 				PlayMusic (1);
+				break;
+			case 3:
+				PlayMusic(2);
 				break;
 			}
 		}
@@ -47,6 +51,7 @@ public class MusicManager : MonoBehaviour {
 	}
 
 	public void PlayMusic(int soundIndex) {
+		audioSource.Stop ();
 		audioSource.clip = musicTrackArray [soundIndex];
 		audioSource.volume = CalculateVolume (MUSIC_SOUND); 
 		audioSource.loop = true;

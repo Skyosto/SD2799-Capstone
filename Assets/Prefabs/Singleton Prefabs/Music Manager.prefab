@@ -110,8 +110,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   musicTrackArray:
-  - {fileID: 8300000, guid: 62f1cb017b2d2524c95965ae85808e59, type: 3}
+  - {fileID: 8300000, guid: 3a3e16a1e5ff0be4884a9f74ec415c69, type: 3}
   - {fileID: 8300000, guid: 42c41fe574a3b2c46a574d4c89ef2acf, type: 3}
+  - {fileID: 8300000, guid: a390e3e0ebecc23438e1c7de8e18757e, type: 3}
+  - {fileID: 8300000, guid: 2fb8290e9731b5d4cae7dbc247ef305c, type: 3}
   SoundFXArray:
   - {fileID: 0}
   ambienceTrackArray: []

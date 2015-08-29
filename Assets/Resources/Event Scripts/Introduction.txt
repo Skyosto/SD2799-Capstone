@@ -5,6 +5,7 @@ Huh?... Where... am I? How did I get here?
 Either way, better get moving. I remember the last time I decided to sit around contemplating life.
 #END_Dialog#
 #PAUSE#
+#PLAY_MUSIC#Meeting Orp
 #STRT_Dialog#
 #SPKR#Rizma:
 Yes... let's add to the already odd situation with a metal detector that stands up by itself.
@@ -62,6 +63,7 @@ I highly doubt there is anything out here, much less an entire sh...
 #SPKR#Rizma:
 Of course...
 #END_Dialog#
+#REQUIRES#Shovel
 #PAUSE#
 #STRT_Dialog#
 #SPKR#Rizma:
@@ -78,6 +80,7 @@ Wait, you did that...
 #SPKR#Shovel:
 Finally! I guess my memory hasn't entirely dissipated just yet. The three eggs.
 #END_Dialog#
+#SPAWN#&OBJECT&%turtleEggs%44.02,1.19
 #WHITE_OUT#
 #WHITE_IN#
 #STRT_Dialog#
